@@ -1,0 +1,25 @@
+{
+  "name": "drupal/role",
+  "type": "drupal-module",
+  "description": "Allow manage user settings per role",
+  "keywords": ["Drupal", "User", "Role"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/role",
+  "authors": [
+    {
+      "name": "Roman Salo",
+      "homepage": "https://www.drupal.org/u/rolki",
+      "role": "Maintainer"
+    },
+    {
+      "name": "Mykhailo Gurei",
+      "homepage": "https://www.drupal.org/u/ozin",
+      "role": "Maintainer"
+    }
+  ],
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/role",
+    "source": "http://cgit.drupalcode.org/role"
+  }
+}
