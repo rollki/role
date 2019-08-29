@@ -1,0 +1,7 @@
+name: Role Total Control
+type: module
+description: "Allow manage user settings per role"
+package: User
+core: 8.x
+dependencies:
+  - drupal:user
