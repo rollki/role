@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Role control.
+ */
+
+use Drupal\role\Form\TotalRoleForm;
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function role_entity_type_alter(array &$entity_types) {
+  if (isset($entity_types['user_role'])) {
+    /** @var \Drupal\Core\Config\Entity\ConfigEntityTypeInterface $user_role */
+    $user_role = &$entity_types['user_role'];
+    $user_role->setFormClass('default',TotalRoleForm::class);
+  }
+}
