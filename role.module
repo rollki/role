@@ -5,9 +5,7 @@
  * Role control.
  */
 
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\role\Form\TotalRoleForm;
-use Drupal\user\RoleInterface;
+use Drupal\role\Form\ControlRoleForm;
 
 /**
  * Implements hook_entity_type_alter().
@@ -16,29 +14,6 @@ function role_entity_type_alter(array &$entity_types) {
   if (isset($entity_types['user_role'])) {
     /** @var \Drupal\Core\Config\Entity\ConfigEntityTypeInterface $user_role */
     $user_role = &$entity_types['user_role'];
-    $user_role->setFormClass('default',TotalRoleForm::class);
+    $user_role->setFormClass('default',ControlRoleForm::class);
   }
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function role_form_user_role_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $form['#entity_builders'][] = 'role_form_user_role_form_builder';
-}
-
-/**
- * Entity builder for the role configuration entity.
- *
- * @param $entity_type
- * @param \Drupal\user\RoleInterface $role
- * @param $form
- * @param \Drupal\Core\Form\FormStateInterface $form_state
- */
-function role_form_user_role_form_builder($entity_type, RoleInterface $role, &$form, FormStateInterface $form_state) {
-  if ($form_state->getValue('display')) {
-    $role->setThirdPartySetting('role', 'form_mode', $form_state->getValue('display'));
-    return;
-  }
-  $role->unsetThirdPartySetting('role', 'form_mode');
 }
