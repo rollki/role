@@ -1,0 +1,3 @@
+services:
+  role.control_manager:
+    class: Drupal\role\Service\RoleControlManager
