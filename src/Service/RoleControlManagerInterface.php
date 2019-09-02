@@ -36,4 +36,9 @@ interface RoleControlManagerInterface {
    */
   public function getUserFormMode(UserInterface $user);
 
+  /**
+   * Get user priority role.
+   */
+  public function getUserPriorityRole(UserInterface $user);
+
 }

@@ -5,7 +5,9 @@
  * Role control.
  */
 
+use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
 use Drupal\role\Form\ControlRoleForm;
+use Drupal\user\Entity\Role;
 
 /**
  * Implements hook_entity_type_alter().
@@ -15,5 +17,46 @@ function role_entity_type_alter(array &$entity_types) {
     /** @var \Drupal\Core\Config\Entity\ConfigEntityTypeInterface $user_role */
     $user_role = &$entity_types['user_role'];
     $user_role->setFormClass('default',ControlRoleForm::class);
+  }
+}
+
+/**
+ * Implements hook_entity_form_display_alter().
+ */
+function role_entity_form_display_alter(EntityFormDisplayInterface &$form_display, array $context) {
+  if ($context['entity_type'] == 'user' && $context['bundle'] == 'user') {
+    $control_manager = Drupal::service('role.control_manager');
+    /** @var \Drupal\user\Entity\User $user */
+    $user = Drupal::routeMatch()->getParameter('user');
+    if (!$user) {
+      return;
+    }
+
+    /** @var Drupal\user\Entity\Role $role */
+    $role = $control_manager->getUserPriorityRole($user);
+
+    if ($role) {
+      // Set form display mode to the edit account page.
+      $third_party_settings = $role->getThirdPartySettings('role');
+      if ($third_party_settings) {
+        /** @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface $storage */
+        $storage = Drupal::service('entity_type.manager')
+          ->getStorage('entity_form_display');
+
+        if (!isset($third_party_settings['account_form_mode'])) {
+          $authenticated_role = Role::load('authenticated');
+          $default_form_mode = $authenticated_role->getThirdPartySettings('role')['account_form_mode'];
+          if (!$default_form_mode) {
+            $default_form_mode = 'default';
+          }
+          $form_display = $storage->load($context['entity_type'] . '.' . $context['bundle'] . '.' . $default_form_mode);
+        }
+        else {
+          $edit_form_mode = $third_party_settings['account_form_mode'];
+          $form_display = $storage->load($context['entity_type'] . '.' . $context['bundle'] . '.' . $edit_form_mode);
+        }
+
+      }
+    }
   }
 }
