@@ -49,21 +49,26 @@ class RoleControlManager implements RoleControlManagerInterface {
    * {@inheritdoc}
    */
   public function getUserAccountFormMode(UserInterface $user) {
-    /** @var Drupal\user\Entity\RoleInterface $role */
+    /** @var \Drupal\user\RoleInterface $role */
     $role = $this->getUserPriorityRole($user);
-    $third_party_settings = $role->getThirdPartySettings('role');
+    $third_party_settings = $role->getThirdPartySettings(self::MODULE_NAME);
     if (!$third_party_settings) {
-      return;
+      return NULL;
     }
     $form_mode_field_name = $this->getExtraFieldKey('account_form_mode');
-    return $third_party_settings[$form_mode_field_name];
+    $form_mode = $third_party_settings[$form_mode_field_name];
+    if ($form_mode === 'default') {
+      return NULL;
+    }
+
+    return $form_mode;
   }
 
   /**
    * Get user priority role.
    */
   public function getUserPriorityRole(UserInterface $user) {
-    // @todo Implemented only for no more than 2 roles.
+    // TODO Implemented only for no more than 2 roles.
     $roleStorage = $this->entityTypeManager->getStorage('user_role');
     $roles = $user->getRoles();
     if (count($roles) === 1 && in_array(AccountInterface::AUTHENTICATED_ROLE, $roles)) {

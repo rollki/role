@@ -6,9 +6,7 @@
  */
 
 use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\role\Form\ControlRoleForm;
-use Drupal\user\Entity\Role;
 
 /**
  * Implements hook_entity_type_alter().
@@ -34,27 +32,14 @@ function role_entity_form_display_alter(EntityFormDisplayInterface &$form_displa
       return;
     }
 
-    /** @var Drupal\user\Entity\RoleInterface $role */
-    $role = $control_manager->getUserPriorityRole($user);
-
-    if ($role) {
+    if ($context['form_mode'] === 'default') {
       /** @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface $storage */
       $storage = Drupal::service('entity_type.manager')
         ->getStorage('entity_form_display');
 
-      if (!$control_manager->getUserAccountFormMode($user)) {
-        $authenticated_role = Role::load(AccountInterface::AUTHENTICATED_ROLE);
-        $default_form_mode = $authenticated_role->getThirdPartySettings('role')[$control_manager->getExtraFieldKey('account_form_mode')];
-        if (!$default_form_mode) {
-          $default_form_mode = 'default';
-        }
-        $form_display = $storage->load($context['entity_type'] . '.' . $context['bundle'] . '.' . $default_form_mode);
+      if ($form_mode = $control_manager->getUserAccountFormMode($user)) {
+        $form_display = $storage->load($context['entity_type'] . '.' . $context['bundle'] . '.' . $form_mode);
       }
-      else {
-        $edit_form_mode = $control_manager->getUserAccountFormMode($user);
-        $form_display = $storage->load($context['entity_type'] . '.' . $context['bundle'] . '.' . $edit_form_mode);
-      }
-
     }
   }
 }

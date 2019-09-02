@@ -6,6 +6,7 @@ use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\role\Service\RoleControlManager;
+use Drupal\role\Service\RoleControlManagerInterface;
 use Drupal\user\RoleForm;
 use Drupal\user\RoleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -64,7 +65,7 @@ class ControlRoleForm extends RoleForm implements ContainerInjectionInterface {
       '#type' => 'select',
       '#title' => $this->t('Form mode'),
       '#options' => $this->getUserFormModesOptions(),
-      '#default_value' => $role->getThirdPartySetting('role', $form_mode_field_name),
+      '#default_value' => $role->getThirdPartySetting(RoleControlManagerInterface::MODULE_NAME, $form_mode_field_name),
       '#description' => $this->t('Select which form mode to use on the user account edit form'),
     ];
 
@@ -95,7 +96,7 @@ class ControlRoleForm extends RoleForm implements ContainerInjectionInterface {
   public function controlRoleBuilder($entity_type, RoleInterface $role, &$form, FormStateInterface &$form_state) {
     foreach ($this->roleControlManager->getExtraFields() as $field_name) {
       if ($form_state->hasValue($field_name)) {
-        $role->setThirdPartySetting('role', $field_name, $form_state->getValue($field_name));
+        $role->setThirdPartySetting(RoleControlManagerInterface::MODULE_NAME, $field_name, $form_state->getValue($field_name));
       }
     }
   }

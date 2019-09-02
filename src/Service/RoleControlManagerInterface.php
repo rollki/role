@@ -10,6 +10,11 @@ use Drupal\user\UserInterface;
 interface RoleControlManagerInterface {
 
   /**
+   * The module name.
+   */
+  const MODULE_NAME = 'role';
+
+  /**
    * Get extra fields.
    *
    * @return array
