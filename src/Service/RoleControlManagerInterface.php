@@ -34,7 +34,7 @@ interface RoleControlManagerInterface {
    * @return string
    *   User form mode.
    */
-  public function getUserFormMode(UserInterface $user);
+  public function getUserAccountFormMode(UserInterface $user);
 
   /**
    * Get user priority role.

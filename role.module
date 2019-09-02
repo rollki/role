@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\role\Form\ControlRoleForm;
 use Drupal\user\Entity\Role;
 
@@ -24,7 +25,8 @@ function role_entity_type_alter(array &$entity_types) {
  * Implements hook_entity_form_display_alter().
  */
 function role_entity_form_display_alter(EntityFormDisplayInterface &$form_display, array $context) {
-  if ($context['entity_type'] == 'user' && $context['bundle'] == 'user') {
+  if ($context['entity_type'] === 'user' && $context['bundle'] === 'user') {
+    /** @var Drupal\role\Service\RoleControlManagerInterface $control_manager */
     $control_manager = Drupal::service('role.control_manager');
     /** @var \Drupal\user\Entity\User $user */
     $user = Drupal::routeMatch()->getParameter('user');
@@ -32,31 +34,27 @@ function role_entity_form_display_alter(EntityFormDisplayInterface &$form_displa
       return;
     }
 
-    /** @var Drupal\user\Entity\Role $role */
+    /** @var Drupal\user\Entity\RoleInterface $role */
     $role = $control_manager->getUserPriorityRole($user);
 
     if ($role) {
-      // Set form display mode to the edit account page.
-      $third_party_settings = $role->getThirdPartySettings('role');
-      if ($third_party_settings) {
-        /** @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface $storage */
-        $storage = Drupal::service('entity_type.manager')
-          ->getStorage('entity_form_display');
+      /** @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface $storage */
+      $storage = Drupal::service('entity_type.manager')
+        ->getStorage('entity_form_display');
 
-        if (!isset($third_party_settings['account_form_mode'])) {
-          $authenticated_role = Role::load('authenticated');
-          $default_form_mode = $authenticated_role->getThirdPartySettings('role')['account_form_mode'];
-          if (!$default_form_mode) {
-            $default_form_mode = 'default';
-          }
-          $form_display = $storage->load($context['entity_type'] . '.' . $context['bundle'] . '.' . $default_form_mode);
+      if (!$control_manager->getUserAccountFormMode($user)) {
+        $authenticated_role = Role::load(AccountInterface::AUTHENTICATED_ROLE);
+        $default_form_mode = $authenticated_role->getThirdPartySettings('role')[$control_manager->getExtraFieldKey('account_form_mode')];
+        if (!$default_form_mode) {
+          $default_form_mode = 'default';
         }
-        else {
-          $edit_form_mode = $third_party_settings['account_form_mode'];
-          $form_display = $storage->load($context['entity_type'] . '.' . $context['bundle'] . '.' . $edit_form_mode);
-        }
-
+        $form_display = $storage->load($context['entity_type'] . '.' . $context['bundle'] . '.' . $default_form_mode);
       }
+      else {
+        $edit_form_mode = $control_manager->getUserAccountFormMode($user);
+        $form_display = $storage->load($context['entity_type'] . '.' . $context['bundle'] . '.' . $edit_form_mode);
+      }
+
     }
   }
 }
