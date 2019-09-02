@@ -1,3 +1,5 @@
 services:
   role.control_manager:
     class: Drupal\role\Service\RoleControlManager
+    arguments:
+      - '@entity_type.manager'

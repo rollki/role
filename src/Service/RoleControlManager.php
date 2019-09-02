@@ -2,12 +2,30 @@
 
 namespace Drupal\role\Service;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\user\UserInterface;
 
 /**
  * Class RoleControlManager.
  */
 class RoleControlManager implements RoleControlManagerInterface {
+
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * RoleControlManager constructor.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   */
+  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
+    $this->entityTypeManager = $entity_type_manager;
+  }
 
   /**
    * {@inheritdoc}
@@ -30,10 +48,38 @@ class RoleControlManager implements RoleControlManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function getUserFormMode(UserInterface $user) {
-    // TODO implement user form mode negotiation,
-    // which determine which role to use as main for user and fetch it settings.
-    return '';
+  public function getUserAccountFormMode(UserInterface $user) {
+    /** @var \Drupal\user\RoleInterface $role */
+    $role = $this->getUserPriorityRole($user);
+    $third_party_settings = $role->getThirdPartySettings(self::MODULE_NAME);
+    if (!$third_party_settings) {
+      return NULL;
+    }
+    $form_mode_field_name = $this->getExtraFieldKey('account_form_mode');
+    $form_mode = $third_party_settings[$form_mode_field_name];
+    if ($form_mode === 'default') {
+      return NULL;
+    }
+
+    return $form_mode;
+  }
+
+  /**
+   * Get user priority role.
+   */
+  public function getUserPriorityRole(UserInterface $user) {
+    // TODO Implemented only for no more than 2 roles.
+    $roleStorage = $this->entityTypeManager->getStorage('user_role');
+    $roles = $user->getRoles();
+    if (count($roles) === 1 && in_array(AccountInterface::AUTHENTICATED_ROLE, $roles)) {
+      $role = $roleStorage->load(AccountInterface::AUTHENTICATED_ROLE);
+    }
+    else {
+      array_splice($roles, array_search(AccountInterface::AUTHENTICATED_ROLE, $roles), 1);
+      $first_role = reset($roles);
+      $role = $roleStorage->load($first_role);
+    }
+    return $role;
   }
 
 }

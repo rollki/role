@@ -5,6 +5,7 @@
  * Role control.
  */
 
+use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
 use Drupal\role\Form\ControlRoleForm;
 
 /**
@@ -15,5 +16,30 @@ function role_entity_type_alter(array &$entity_types) {
     /** @var \Drupal\Core\Config\Entity\ConfigEntityTypeInterface $user_role */
     $user_role = &$entity_types['user_role'];
     $user_role->setFormClass('default',ControlRoleForm::class);
+  }
+}
+
+/**
+ * Implements hook_entity_form_display_alter().
+ */
+function role_entity_form_display_alter(EntityFormDisplayInterface &$form_display, array $context) {
+  if ($context['entity_type'] === 'user' && $context['bundle'] === 'user') {
+    /** @var Drupal\role\Service\RoleControlManagerInterface $control_manager */
+    $control_manager = Drupal::service('role.control_manager');
+    /** @var \Drupal\user\Entity\User $user */
+    $user = Drupal::routeMatch()->getParameter('user');
+    if (!$user) {
+      return;
+    }
+
+    if ($context['form_mode'] === 'default') {
+      /** @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface $storage */
+      $storage = Drupal::service('entity_type.manager')
+        ->getStorage('entity_form_display');
+
+      if ($form_mode = $control_manager->getUserAccountFormMode($user)) {
+        $form_display = $storage->load($context['entity_type'] . '.' . $context['bundle'] . '.' . $form_mode);
+      }
+    }
   }
 }

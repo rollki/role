@@ -10,6 +10,11 @@ use Drupal\user\UserInterface;
 interface RoleControlManagerInterface {
 
   /**
+   * The module name.
+   */
+  const MODULE_NAME = 'role';
+
+  /**
    * Get extra fields.
    *
    * @return array
@@ -34,6 +39,11 @@ interface RoleControlManagerInterface {
    * @return string
    *   User form mode.
    */
-  public function getUserFormMode(UserInterface $user);
+  public function getUserAccountFormMode(UserInterface $user);
+
+  /**
+   * Get user priority role.
+   */
+  public function getUserPriorityRole(UserInterface $user);
 
 }
