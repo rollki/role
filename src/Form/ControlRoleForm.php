@@ -102,7 +102,7 @@ class ControlRoleForm extends RoleForm implements ContainerInjectionInterface {
    * Get user view modes options.
    *
    * @return array
-   *   Form mode options.
+   *   View mode options.
    */
   public function getUserViewModesOptions() {
     // Load user view modes.
