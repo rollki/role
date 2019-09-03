@@ -42,8 +42,21 @@ interface RoleControlManagerInterface {
   public function getUserAccountFormMode(UserInterface $user);
 
   /**
+   * Get user view mode based on his roles.
+   *
+   * @return string
+   *   User form mode.
+   */
+  public function getUserAccountViewMode(UserInterface $user);
+
+  /**
    * Get user priority role.
    */
   public function getUserPriorityRole(UserInterface $user);
+
+  /**
+   * Gets all third-party settings of a given module based on his roles.
+   */
+  public function getRoleThirdPartySettings(UserInterface $user);
 
 }
