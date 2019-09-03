@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\role\Form\ControlRoleForm;
 
 /**
@@ -41,5 +42,21 @@ function role_entity_form_display_alter(EntityFormDisplayInterface &$form_displa
         $form_display = $storage->load($context['entity_type'] . '.' . $context['bundle'] . '.' . $form_mode);
       }
     }
+  }
+}
+
+/**
+ * Implements hook_entity_view_mode_alter().
+ */
+function role_entity_view_mode_alter(&$view_mode, EntityInterface $entity, $context) {
+  if ($entity->bundle() === 'user') {
+    /** @var Drupal\role\Service\RoleControlManagerInterface $control_manager */
+    $control_manager = Drupal::service('role.control_manager');
+    /** @var \Drupal\user\Entity\User $user */
+    $user = Drupal::routeMatch()->getParameter('user');
+    if (!$user) {
+      return;
+    }
+    ($control_manager->getUserAccountViewMode($user) ? $view_mode = $control_manager->getUserAccountViewMode($user) : '');
   }
 }
