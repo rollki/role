@@ -55,18 +55,26 @@ class ControlRoleForm extends RoleForm implements ContainerInjectionInterface {
     $form = parent::form($form, $form_state);
     /** @var \Drupal\user\RoleInterface $role */
     $role = $this->entity;
+    $form_mode_field_name = $this->roleControlManager->getExtraFieldKey('account_form_mode');
+    $view_mode_field_name = $this->roleControlManager->getExtraFieldKey('account_view_mode');
 
     $form['account'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Account settings'),
     ];
-    $form_mode_field_name = $this->roleControlManager->getExtraFieldKey('account_form_mode');
     $form['account'][$form_mode_field_name] = [
       '#type' => 'select',
       '#title' => $this->t('Form mode'),
       '#options' => $this->getUserFormModesOptions(),
       '#default_value' => $role->getThirdPartySetting(RoleControlManagerInterface::MODULE_NAME, $form_mode_field_name),
       '#description' => $this->t('Select which form mode to use on the user account edit form'),
+    ];
+    $form['account'][$view_mode_field_name] = [
+      '#type' => 'select',
+      '#title' => $this->t('View mode'),
+      '#options' => $this->getUserViewModesOptions(),
+      '#default_value' => $role->getThirdPartySetting(RoleControlManagerInterface::MODULE_NAME, $view_mode_field_name),
+      '#description' => $this->t('Select which view mode to use on the user page'),
     ];
 
     $form['#entity_builders'][] = '::controlRoleBuilder';
@@ -88,6 +96,23 @@ class ControlRoleForm extends RoleForm implements ContainerInjectionInterface {
     }
 
     return $user_form_modes_options;
+  }
+
+  /**
+   * Get user view modes options.
+   *
+   * @return array
+   *   View mode options.
+   */
+  public function getUserViewModesOptions() {
+    // Load user view modes.
+    $user_view_modes = $this->entityDisplayRepository->getViewModeOptionsByBundle('user', 'user');
+    $user_view_modes_options = ['default' => $this->t('Default')];
+    foreach ($user_view_modes as $key => $view_mode_label) {
+      $user_view_modes_options[$key] = $view_mode_label;
+    }
+
+    return $user_view_modes_options;
   }
 
   /**
