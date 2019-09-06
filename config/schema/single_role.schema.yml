@@ -1,0 +1,8 @@
+role_single.settings:
+  type: mapping
+  label: Settings
+  mapping:
+    field_type:
+      type: string
+    field_description:
+      type: string
