@@ -1,0 +1,7 @@
+role.single.settings:
+  path: '/admin/people/roles/single-user-role'
+  defaults:
+    _form: '\Drupal\role\Form\SingleRoleSettingsForm'
+    _title: 'Single role Settings'
+  requirements:
+    _permission: 'administer permissions'
