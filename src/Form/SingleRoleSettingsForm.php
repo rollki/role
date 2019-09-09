@@ -4,10 +4,9 @@ namespace Drupal\role\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
 
 /**
- * Role Single configuration settings.
+ * Single Role configuration settings.
  */
 class SingleRoleSettingsForm extends ConfigFormBase {
 
@@ -46,8 +45,8 @@ class SingleRoleSettingsForm extends ConfigFormBase {
       '#type' => 'select',
       '#default_value' => $config->get('field_type'),
       '#options' => [
-        'select' => t('Select field'),
-        'radios' => t('Radio field'),
+        'select' => $this->t('Select field'),
+        'radios' => $this->t('Radio field'),
       ],
       '#states' => [
         'visible' => [
