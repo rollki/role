@@ -51,10 +51,10 @@ class RoleControlManager implements RoleControlManagerInterface {
    */
   public function getUserAccountFormMode(UserInterface $user) {
     $third_party_settings = $this->getRoleThirdPartySettings($user);
-    if (!$third_party_settings) {
+    $form_mode_field_name = $this->getExtraFieldKey('account_form_mode');
+    if (!$third_party_settings || !isset($third_party_settings[$form_mode_field_name])) {
       return NULL;
     }
-    $form_mode_field_name = $this->getExtraFieldKey('account_form_mode');
     $form_mode = $third_party_settings[$form_mode_field_name];
     if ($form_mode === 'default') {
       return NULL;
