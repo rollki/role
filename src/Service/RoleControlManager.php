@@ -20,8 +20,6 @@ class RoleControlManager implements RoleControlManagerInterface {
 
   /**
    * RoleControlManager constructor.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager) {
     $this->entityTypeManager = $entity_type_manager;
@@ -97,6 +95,7 @@ class RoleControlManager implements RoleControlManagerInterface {
       $first_role = reset($roles);
       $role = $role_storage->load($first_role);
     }
+
     return $role;
   }
 
@@ -106,6 +105,8 @@ class RoleControlManager implements RoleControlManagerInterface {
   public function getRoleThirdPartySettings(UserInterface $user) {
     /** @var \Drupal\user\RoleInterface $role */
     $role = $this->getUserPriorityRole($user);
+
     return $role->getThirdPartySettings(self::MODULE_NAME);
   }
+
 }
