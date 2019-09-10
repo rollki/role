@@ -5,3 +5,5 @@ role.single.settings:
     _title: 'Single role Settings'
   requirements:
     _permission: 'administer permissions'
+  options:
+    _admin_route: TRUE

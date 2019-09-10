@@ -78,14 +78,11 @@ function role_form_alter(&$form, FormStateInterface $form_state, $form_id) {
       }
       _single_role_edit_element($element, $form);
       break;
-  }
-}
 
-/**
- * Implements hook_form_ID_alter() for 'role_delegation_role_assign_form'.
- */
-function role_form_role_delegation_role_assign_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  _single_role_edit_element($form['account']['role_change'], $form);
+    case 'role_delegation_role_assign_form':
+      _single_role_edit_element($form['account']['role_change'], $form);
+      break;
+  }
 }
 
 /**
@@ -118,28 +115,5 @@ function _single_role_edit_element(&$element, &$form) {
       $element['#default_value'] = $value;
       break;
     }
-    // Add custom validation to be called before the core validation.
-    array_unshift($form['#validate'], 'role_single_form_validate');
   }
-}
-
-/**
- * Validation callback for role_form_alter().
- *
- * Transforms the roles value to be wrapped in an array that drupal
- * core expects:
- * eg: `['role_name' => 'role_name']`
- *
- * @param array $form
- * @param \Drupal\Core\Form\FormStateInterface $form_state
- */
-function role_single_form_validate(array &$form, FormStateInterface &$form_state) {
-  // Get the value of the selected role.
-  $role = $form_state->getValue('roles');
-  // Ignore if the role is not set.
-  if (empty($role) || is_array($role)) {
-    return;
-  }
-  // Transform the roles value to be wrapped in an array.
-  $form_state->setValue('roles', array_combine([$role], [$role]));
 }

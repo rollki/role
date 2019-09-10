@@ -40,7 +40,7 @@ class SingleRoleSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('state'),
     ];
     $form['single_role']['field_type'] = [
-      '#title' => t('Field type'),
+      '#title' => $this->t('Field type'),
       '#description' => $this->t('Set type of field to use for user role selection.'),
       '#type' => 'select',
       '#default_value' => $config->get('field_type'),
@@ -55,7 +55,7 @@ class SingleRoleSettingsForm extends ConfigFormBase {
       ],
     ];
     $form['single_role']['field_description'] = [
-      '#title' => 'Role field help text',
+      '#title' => $this->t('Role field help text'),
       '#type' => 'textarea',
       '#description' => $this->t('This text is displayed at user role field.'),
       '#default_value' => $config->get('field_description'),
