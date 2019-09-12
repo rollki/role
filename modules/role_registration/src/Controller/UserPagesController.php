@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormState;
 use Drupal\role_registration\Service\RoleRegistrationManager;
+use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -69,10 +70,12 @@ class UserPagesController extends ControllerBase {
    * @return array
    */
   public function registerPage($role_id) {
-    $form_display = $this->roleRegistrationManager->getUserRegistrationFormMode($role_id);
-    if (!$form_display) {
+    $role = Role::load($role_id);
+    $third_party_settings = $this->roleRegistrationManager->getRegistrationThirdPartySettings($role);
+    if (!$third_party_settings['registration_status']) {
       throw new NotFoundHttpException();
     }
+    $form_display = $third_party_settings['account_registration_form_mode'];
     // Be sure definition is up to date.
     /** @var \Drupal\Core\Entity\ContentEntityType $userEntityDefinition */
     $userEntityDefinition = $this->entityTypeManager->getDefinition('user');

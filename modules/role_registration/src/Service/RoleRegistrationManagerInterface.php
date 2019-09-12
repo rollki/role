@@ -24,18 +24,10 @@ interface RoleRegistrationManagerInterface {
    *
    * @param \Drupal\user\RoleInterface $role
    *
+   * @param null $setting_name
+   *
    * @return array
    *   An array of key-value pairs.
    */
-  public function getRegistrationThirdPartySettings(RoleInterface $role);
-
-  /**
-   * Get user registration form mode based on his roles.
-   *
-   * @param $role_id
-   *
-   * @return string
-   *   User form mode.
-   */
-  public function getUserRegistrationFormMode($role_id);
+  public function getRegistrationThirdPartySettings(RoleInterface $role, $setting_name = NULL);
 }
