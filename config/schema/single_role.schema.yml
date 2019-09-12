@@ -1,8 +1,13 @@
-role_single.settings:
-  type: mapping
-  label: Settings
+single_role.settings:
+  type: config_object
+  label: 'Single role settings'
   mapping:
     field_type:
       type: string
+      label: 'Field type'
     field_description:
       type: string
+      label: 'Field description'
+    state:
+      type: boolean
+      label: 'Field description'
