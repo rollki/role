@@ -59,8 +59,7 @@ class ThemeNegotiator implements ThemeNegotiatorInterface {
    * {@inheritdoc}
    */
   public function determineActiveTheme(RouteMatchInterface $route_match) {
-    $current_user = $this->user;
-    $custom_theme = $this->roleControlManager->getRoleThirdPartySettings($current_user)['role_theme'];
+    $custom_theme = $this->roleControlManager->getRoleThirdPartySetting($this->user, 'role_theme');
     if (!$custom_theme) {
       $config = $this->configFactory->get('system.theme');
       $custom_theme = $config->get('default');
