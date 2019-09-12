@@ -1,0 +1,5 @@
+name: Role registration
+type: module
+description: Create registraion pages based on roles and user display modes.
+package: User
+core: '8.x'

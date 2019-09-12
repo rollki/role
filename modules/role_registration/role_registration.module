@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @file
+ * Contains role_registration.module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\user\RoleInterface;
+
+/**
+ * Implements hook_form_alter().
+ */
+function role_registration_form_user_role_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var Drupal\role\Service\RoleControlManagerInterface $control_manager */
+  $control_manager = Drupal::service('role.control_manager');
+
+  $form['account']['registration_status'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Enable registration by form mode'),
+  ];
+
+  $form['account']['account_registration_form_mode'] = [
+    '#type' => 'select',
+    '#title' => t('Registration Form mode'),
+    '#options' => $control_manager->getUserFormModesOptions(),
+    '#description' => t('Select which form mode to use on the user registration page'),
+    '#states' => [
+      'visible' => [
+        [':input[name="registration_status"]' => ['checked' => TRUE]],
+      ],
+    ],
+  ];
+
+  $form['#entity_builders'][] = 'role_registration_third_party_settings_form_builder';
+}
+
+/**
+ * Entity builder for the role configuration entity.
+ *
+ * @param $entity_type
+ * @param \Drupal\user\RoleInterface $role
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ */
+function role_registration_third_party_settings_form_builder($entity_type, RoleInterface $role, &$form, FormStateInterface $form_state) {
+
+}
