@@ -5,13 +5,13 @@ namespace Drupal\role\Annotation;
 use Drupal\Component\Annotation\Plugin;
 
 /**
- * Defines a DevelDumper annotation object.
+ * Defines a RoleConfigElement annotation object.
  *
  * @Annotation
  *
- * @see \Drupal\devel\DevelDumperPluginManager
- * @see \Drupal\devel\DevelDumperInterface
- * @see \Drupal\devel\DevelDumperBase
+ * @see \Drupal\role\Service\RoleConfigElementManager
+ * @see \Drupal\role\RoleConfigElementInterface
+ * @see \Drupal\role\RoleConfigElementBase
  * @see plugin_api
  */
 class RoleConfigElement extends Plugin {
@@ -24,7 +24,7 @@ class RoleConfigElement extends Plugin {
   public $id;
 
   /**
-   * The human-readable name of the DevelDumper type.
+   * The human-readable name of the RoleConfigElement type.
    *
    * @ingroup plugin_translatable
    *
