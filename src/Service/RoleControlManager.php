@@ -5,19 +5,13 @@ namespace Drupal\role\Service;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\role\Plugin\RoleConfigElementManager;
 use Drupal\user\UserInterface;
 
 /**
  * Class RoleControlManager.
  */
 class RoleControlManager implements RoleControlManagerInterface {
-
-  /**
-   * Extra fields.
-   *
-   * @var array
-   */
-  protected $extraFields = [];
 
   /**
    * The entity type manager.
@@ -34,38 +28,32 @@ class RoleControlManager implements RoleControlManagerInterface {
   protected $moduleHandler;
 
   /**
-   * RoleControlManager constructor.
-<<<<<<< HEAD
+   * Drupal\role\Plugin\RoleConfigElementManager definition.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity tupe manager.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler.
-=======
->>>>>>> fc9adb7f0360ea6d5889328fbfdaae8b19426665
+   * @var \Drupal\role\Plugin\RoleConfigElementManager
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler) {
+  protected $roleConfigElementManager;
+
+  /**
+   * RoleControlManager constructor.
+   */
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, RoleConfigElementManager $role_config_element_manager) {
     $this->entityTypeManager = $entity_type_manager;
     $this->moduleHandler = $module_handler;
+    $this->roleConfigElementManager = $role_config_element_manager;
   }
 
   /**
    * {@inheritdoc}
    */
   public function getExtraFields() {
-    $extra = $this->moduleHandler->invokeAll('role_extra_field_info');
-    $this->moduleHandler->alter('role_extra_field_info', $extra);
-    $info = isset($extra) ? $extra : [];
-    $info +=  [
-      'account_form_mode' => 'account_form_mode',
-      'account_view_mode' => 'account_view_mode',
-    ];
-    $this->moduleHandler->alter('role_extra_field_info', $extra);
+    $extra_fields = [];
+    $definitions = $this->roleConfigElementManager->getDefinitions();
+    foreach ($definitions as $definition) {
+      $extra_fields[$definition['id']] = $definition['id'];
+    }
 
-    // Store in the 'static'.
-    $this->extraFields = $info;
-
-    return $this->extraFields;
+    return $extra_fields;
   }
 
   /**
