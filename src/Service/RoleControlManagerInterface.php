@@ -65,4 +65,11 @@ interface RoleControlManagerInterface {
    */
   public function getRoleThirdPartySettings(UserInterface $user);
 
+  /**
+   * Get user form modes options.
+   *
+   * @return array
+   *   Form mode options.
+   */
+  public function getUserFormModesOptions();
 }

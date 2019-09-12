@@ -2,6 +2,7 @@
 
 namespace Drupal\role\Service;
 
+use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\user\UserInterface;
@@ -19,10 +20,21 @@ class RoleControlManager implements RoleControlManagerInterface {
   protected $entityTypeManager;
 
   /**
-   * RoleControlManager constructor.
+   * The entity display repository.
+   *
+   * @var \Drupal\Core\Entity\EntityDisplayRepositoryInterface
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
+  protected $entityDisplayRepository;
+
+  /**
+   * RoleControlManager constructor.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityDisplayRepositoryInterface $entity_display_repository
+   */
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityDisplayRepositoryInterface $entity_display_repository) {
     $this->entityTypeManager = $entity_type_manager;
+    $this->entityDisplayRepository = $entity_display_repository;
   }
 
   /**
@@ -109,4 +121,16 @@ class RoleControlManager implements RoleControlManagerInterface {
     return $role->getThirdPartySettings(self::MODULE_NAME);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getUserFormModesOptions() {
+    $user_form_modes = $this->entityDisplayRepository->getFormModeOptionsByBundle('user', 'user');
+    $user_form_modes_options = ['default' => 'Default'];
+    foreach ($user_form_modes as $key => $form_mode_label) {
+      $user_form_modes_options[$key] = $form_mode_label;
+    }
+
+    return $user_form_modes_options;
+  }
 }

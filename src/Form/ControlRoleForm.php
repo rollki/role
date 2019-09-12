@@ -65,7 +65,7 @@ class ControlRoleForm extends RoleForm implements ContainerInjectionInterface {
     $form['account'][$form_mode_field_name] = [
       '#type' => 'select',
       '#title' => $this->t('Form mode'),
-      '#options' => $this->getUserFormModesOptions(),
+      '#options' => $this->roleControlManager->getUserFormModesOptions(),
       '#default_value' => $role->getThirdPartySetting(RoleControlManagerInterface::MODULE_NAME, $form_mode_field_name),
       '#description' => $this->t('Select which form mode to use on the user account edit form'),
     ];
@@ -79,23 +79,6 @@ class ControlRoleForm extends RoleForm implements ContainerInjectionInterface {
 
     $form['#entity_builders'][] = '::controlRoleBuilder';
     return $form;
-  }
-
-  /**
-   * Get user form modes options.
-   *
-   * @return array
-   *   Form mode options.
-   */
-  public function getUserFormModesOptions() {
-    // Load user display modes.
-    $user_form_modes = $this->entityDisplayRepository->getFormModeOptionsByBundle('user', 'user');
-    $user_form_modes_options = ['default' => $this->t('Default')];
-    foreach ($user_form_modes as $key => $form_mode_label) {
-      $user_form_modes_options[$key] = $form_mode_label;
-    }
-
-    return $user_form_modes_options;
   }
 
   /**
