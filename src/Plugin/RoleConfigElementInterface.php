@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\role;
+namespace Drupal\role\Plugin;
 
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\user\RoleInterface;
@@ -8,15 +8,13 @@ use Drupal\user\RoleInterface;
 /**
  * Defines the interface for text processing filter plugins.
  *
- * @see \Drupal\role\RoleConfigElementBase
  * @see plugin_api
  */
 interface RoleConfigElementInterface extends PluginInspectionInterface {
 
   /**
-   * @param $form
-   * @param RoleInterface $role
-   * @return mixed
+   * Attach element to the form.
    */
   public function attachElement(&$form, RoleInterface $role);
+
 }

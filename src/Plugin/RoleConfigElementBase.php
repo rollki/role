@@ -1,18 +1,16 @@
 <?php
 
-namespace Drupal\role;
+namespace Drupal\role\Plugin;
 
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
-use Drupal\role\Service\RoleConfigElementManager;
-use Drupal\role\Service\RoleControlManager;
+use Drupal\role\Service\RoleControlManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a base class for Role plugins.
  *
- * @see \Drupal\role\RoleConfigElementInterface
  * @see role_api
  */
 abstract class RoleConfigElementBase extends PluginBase implements RoleConfigElementInterface, ContainerFactoryPluginInterface {
@@ -25,27 +23,19 @@ abstract class RoleConfigElementBase extends PluginBase implements RoleConfigEle
   protected $entityDisplayRepository;
 
   /**
-   * Drupal\role\Service\RoleControlManager definition.
+   * Drupal\role\Service\RoleControlManagerInterface definition.
    *
-   * @var \Drupal\role\Service\RoleControlManager
+   * @var \Drupal\role\Service\RoleControlManagerInterface
    */
   protected $roleControlManager;
 
   /**
-   * Drupal\role\Service\RoleConfigElementManager definition.
-   *
-   * @var \Drupal\role\Service\RoleConfigElementManager
-   */
-  protected $roleConfigElementManager;
-
-  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityDisplayRepositoryInterface $entity_display_repository, RoleControlManager $role_manager, RoleConfigElementManager $role_config_element_manager)  {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityDisplayRepositoryInterface $entity_display_repository, RoleControlManagerInterface $role_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityDisplayRepository = $entity_display_repository;
     $this->roleControlManager = $role_manager;
-    $this->roleConfigElementManager = $role_config_element_manager;
   }
 
   /**
@@ -57,8 +47,8 @@ abstract class RoleConfigElementBase extends PluginBase implements RoleConfigEle
       $plugin_id,
       $plugin_definition,
       $container->get('entity_display.repository'),
-      $container->get('role.control_manager'),
-      $container->get('plugin.manager.role_config_element')
+      $container->get('role.control_manager')
     );
   }
+
 }

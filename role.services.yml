@@ -4,5 +4,5 @@ services:
     arguments: ['@entity_type.manager', '@module_handler', '@plugin.manager.role_config_element']
 
   plugin.manager.role_config_element:
-    class: Drupal\role\Service\RoleConfigElementManager
+    class: Drupal\role\Plugin\RoleConfigElementManager
     parent: default_plugin_manager
