@@ -130,14 +130,9 @@ class RoleControlManager implements RoleControlManagerInterface {
   public function getRoleThirdPartySetting(AccountInterface $user, string $config) {
     /** @var \Drupal\user\RoleInterface $role */
     $role = $this->getUserPriorityRole($user);
-<<<<<<< HEAD
     $settings = $role->getThirdPartySettings(self::MODULE_NAME);
 
     return $settings[$config] ?? NULL;
-=======
-
-    return $role->getThirdPartySettings(self::MODULE_NAME);
->>>>>>> fc9adb7f0360ea6d5889328fbfdaae8b19426665
   }
 
 }

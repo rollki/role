@@ -72,20 +72,6 @@ class ControlRoleForm extends RoleForm implements ContainerInjectionInterface {
       '#type' => 'fieldset',
       '#title' => $this->t('Account settings'),
     ];
-/*    $form['account'][$form_mode_field_name] = [
-      '#type' => 'select',
-      '#title' => $this->t('Form mode'),
-      '#options' => $this->getUserFormModesOptions(),
-      '#default_value' => $role->getThirdPartySetting(RoleControlManagerInterface::MODULE_NAME, $form_mode_field_name),
-      '#description' => $this->t('Select which form mode to use on the user account edit form'),
-    ];
-    $form['account'][$view_mode_field_name] = [
-      '#type' => 'select',
-      '#title' => $this->t('View mode'),
-      '#options' => $this->getUserViewModesOptions(),
-      '#default_value' => $role->getThirdPartySetting(RoleControlManagerInterface::MODULE_NAME, $view_mode_field_name),
-      '#description' => $this->t('Select which view mode to use on the user page'),
-    ];*/
 
     $this->roleConfigElementManager->getRoleConfigElements($form, $role);
 
