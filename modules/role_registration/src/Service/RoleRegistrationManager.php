@@ -2,7 +2,7 @@
 
 namespace Drupal\role_registration\Service;
 
-use Drupal\user\UserInterface;
+use Drupal\user\RoleInterface;
 
 /**
  * Class RoleRegistrationManager.
@@ -12,8 +12,8 @@ class RoleRegistrationManager implements RoleRegistrationManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function getRegistrationThirdPartySettings(UserInterface $user) {
-    // TODO: Implement getRegistrationThirdPartySettings() method.
+  public function getRegistrationThirdPartySettings(RoleInterface $role) {
+    return $role->getThirdPartySettings(self::MODULE_NAME);
   }
 
   /**

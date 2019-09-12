@@ -33,10 +33,14 @@ function role_registration_entity_type_alter(array &$entity_types) {
  * Implements hook_form_alter().
  */
 function role_registration_form_user_role_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  /** @var Drupal\role\Service\RoleControlManagerInterface $control_manager */
-  $control_manager = Drupal::service('role.control_manager');
   /** @var \Drupal\user\RoleInterface $role */
   $role = $form_state->getFormObject()->getEntity();
+  /** @var Drupal\role\Service\RoleControlManagerInterface $control_manager */
+  $control_manager = Drupal::service('role.control_manager');
+  /** @var Drupal\role_registration\Service\RoleRegistrationManagerInterface $registration_manager */
+  $registration_manager = Drupal::service('role_registration.manager');
+  $registration_third_party_settings = $registration_manager->getRegistrationThirdPartySettings($role);
+
   $register_page_url = RoleRegistrationManagerInterface::ROLE_REGISTRATION_BASE_REGISTER_PATH . '/' . $role->id();
 
   $registration_states = [
@@ -53,6 +57,7 @@ function role_registration_form_user_role_form_alter(&$form, FormStateInterface 
   $form['account']['registration']['registration_status'] = [
     '#type' => 'checkbox',
     '#title' => t('Enable registration by form mode'),
+    '#default_value' => $registration_third_party_settings['registration_status'],
   ];
 
   $form['account']['registration']['account_registration_form_mode'] = [
@@ -61,6 +66,7 @@ function role_registration_form_user_role_form_alter(&$form, FormStateInterface 
     '#options' => $control_manager->getUserFormModesOptions(),
     '#description' => t('Select which form mode to use on the user registration page'),
     '#states' => $registration_states,
+    '#default_value' => $registration_third_party_settings['account_registration_form_mode'],
   ];
 
   $form['account']['registration']['register_page_alias'] = [
@@ -70,6 +76,7 @@ function role_registration_form_user_role_form_alter(&$form, FormStateInterface 
     '#description' => t('Register page url for this role is @url', ['@url' => $register_page_url]),
     '#field_prefix' => Drupal::request()->getSchemeAndHttpHost(),
     '#states' => $registration_states,
+    '#default_value' => $registration_third_party_settings['register_page_alias'],
   ];
 
   $form['#entity_builders'][] = 'role_registration_third_party_settings_form_builder';
@@ -84,5 +91,7 @@ function role_registration_form_user_role_form_alter(&$form, FormStateInterface 
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  */
 function role_registration_third_party_settings_form_builder($entity_type, RoleInterface $role, &$form, FormStateInterface $form_state) {
-
+  $role->setThirdPartySetting(RoleRegistrationManagerInterface::MODULE_NAME, 'registration_status', $form_state->getValue('registration_status'));
+  $role->setThirdPartySetting(RoleRegistrationManagerInterface::MODULE_NAME, 'account_registration_form_mode', $form_state->getValue('account_registration_form_mode'));
+  $role->setThirdPartySetting(RoleRegistrationManagerInterface::MODULE_NAME, 'register_page_alias', $form_state->getValue('register_page_alias'));
 }
