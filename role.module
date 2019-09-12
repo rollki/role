@@ -30,7 +30,7 @@ function role_entity_form_display_alter(EntityFormDisplayInterface &$form_displa
     /** @var \Drupal\user\Entity\User $user */
     $user = Drupal::routeMatch()->getParameter('user');
     if (!$user) {
-      return;
+      return NULL;
     }
 
     if ($context['form_mode'] === 'default') {
@@ -55,7 +55,7 @@ function role_entity_view_mode_alter(&$view_mode, EntityInterface $entity, $cont
     /** @var \Drupal\user\Entity\User $user */
     $user = Drupal::routeMatch()->getParameter('user');
     if (!$user) {
-      return;
+      return NULL;
     }
     ($control_manager->getUserAccountViewMode($user) ? $view_mode = $control_manager->getUserAccountViewMode($user) : '');
   }

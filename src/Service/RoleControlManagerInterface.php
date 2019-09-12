@@ -64,6 +64,6 @@ interface RoleControlManagerInterface {
    * @return array
    *   An array of key-value pairs.
    */
-  public function getRoleThirdPartySettings(AccountInterface $user);
+  public function getRoleThirdPartySetting(AccountInterface $user, string $config);
 
 }

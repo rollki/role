@@ -78,13 +78,9 @@ class RoleControlManager implements RoleControlManagerInterface {
    * {@inheritdoc}
    */
   public function getUserAccountFormMode(UserInterface $user) {
-    $third_party_settings = $this->getRoleThirdPartySettings($user);
-    if (!$third_party_settings) {
-      return NULL;
-    }
     $form_mode_field_name = $this->getExtraFieldKey('account_form_mode');
-    $form_mode = $third_party_settings[$form_mode_field_name];
-    if ($form_mode === 'default') {
+    $form_mode = $this->getRoleThirdPartySetting($user, $form_mode_field_name);
+    if (!$form_mode || $form_mode === 'default') {
       return NULL;
     }
 
@@ -95,13 +91,9 @@ class RoleControlManager implements RoleControlManagerInterface {
    * {@inheritdoc}
    */
   public function getUserAccountViewMode(UserInterface $user) {
-    $third_party_settings = $this->getRoleThirdPartySettings($user);
-    if (!$third_party_settings) {
-      return NULL;
-    }
     $view_mode_field_name = $this->getExtraFieldKey('account_view_mode');
-    $view_mode = $third_party_settings[$view_mode_field_name];
-    if ($view_mode === 'default') {
+    $view_mode = $this->getRoleThirdPartySetting($user, $view_mode_field_name);
+    if (!$view_mode || $view_mode === 'default') {
       return NULL;
     }
 
@@ -131,9 +123,11 @@ class RoleControlManager implements RoleControlManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function getRoleThirdPartySettings(AccountInterface $user) {
+  public function getRoleThirdPartySetting(AccountInterface $user, string $config) {
     /** @var \Drupal\user\RoleInterface $role */
     $role = $this->getUserPriorityRole($user);
-    return $role->getThirdPartySettings(self::MODULE_NAME);
+    $settings = $role->getThirdPartySettings(self::MODULE_NAME);
+
+    return $settings[$config] ?? NULL;
   }
 }
