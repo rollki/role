@@ -14,4 +14,9 @@ interface RoleRegistrationManagerInterface {
    */
   const MODULE_NAME = 'role_registration';
 
+  /**
+   * The base register path.
+   */
+  const ROLE_REGISTRATION_BASE_REGISTER_PATH = '/user/register';
+
 }

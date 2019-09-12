@@ -6,6 +6,9 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element\PathElement;
+use Drupal\Core\Routing\RequestContext;
+use Drupal\role_registration\Service\RoleRegistrationManagerInterface;
 use Drupal\user\RoleInterface;
 
 /**
@@ -14,6 +17,15 @@ use Drupal\user\RoleInterface;
 function role_registration_form_user_role_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   /** @var Drupal\role\Service\RoleControlManagerInterface $control_manager */
   $control_manager = Drupal::service('role.control_manager');
+  /** @var \Drupal\user\RoleInterface $role */
+  $role = $form_state->getFormObject()->getEntity();
+  $register_page_url = RoleRegistrationManagerInterface::ROLE_REGISTRATION_BASE_REGISTER_PATH . '/' . $role->id();
+
+  $registration_states = [
+    'visible' => [
+      [':input[name="registration_status"]' => ['checked' => TRUE]],
+    ],
+  ];
 
   $form['account']['registration_status'] = [
     '#type' => 'checkbox',
@@ -25,11 +37,16 @@ function role_registration_form_user_role_form_alter(&$form, FormStateInterface 
     '#title' => t('Registration Form mode'),
     '#options' => $control_manager->getUserFormModesOptions(),
     '#description' => t('Select which form mode to use on the user registration page'),
-    '#states' => [
-      'visible' => [
-        [':input[name="registration_status"]' => ['checked' => TRUE]],
-      ],
-    ],
+    '#states' => $registration_states,
+  ];
+
+  $form['account']['register_page_alias'] = [
+    '#type' => 'textfield',
+    '#title' => t('Registration page alias'),
+    '#convert_path' => PathElement::CONVERT_NONE,
+    '#description' => t('Register page url for this role is @url', ['@url' => $register_page_url]),
+    '#field_prefix' => Drupal::request()->getSchemeAndHttpHost(),
+    '#states' => $registration_states,
   ];
 
   $form['#entity_builders'][] = 'role_registration_third_party_settings_form_builder';
