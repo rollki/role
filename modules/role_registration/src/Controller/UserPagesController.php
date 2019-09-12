@@ -5,8 +5,11 @@ namespace Drupal\role_registration\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
+use Drupal\Core\Form\FormState;
 use Drupal\role_registration\Service\RoleRegistrationManager;
+use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class UserPagesController.
@@ -67,6 +70,9 @@ class UserPagesController extends ControllerBase {
    */
   public function registerPage($role_id) {
     $form_display = $this->roleRegistrationManager->getUserRegistrationFormMode($role_id);
+    if (!$form_display) {
+      throw new NotFoundHttpException();
+    }
     // Be sure definition is up to date.
     /** @var \Drupal\Core\Entity\ContentEntityType $userEntityDefinition */
     $userEntityDefinition = $this->entityTypeManager->getDefinition('user');
@@ -74,7 +80,16 @@ class UserPagesController extends ControllerBase {
       $this->entityTypeManager->clearCachedDefinitions();
     }
 
-    return [];
+    $entity = User::create();
+    $form_object = $this->entityTypeManager->getFormObject($entity->getEntityTypeId(), $form_display);
+    $form_object->setEntity($entity);
+
+    $form_state = (new FormState())->setFormState([]);
+    // Add role id value for form state.
+    $form_state->setValue('roleId', $role_id);
+    $registerForm = $this->formBuilder->buildForm($form_object, $form_state);
+
+    return $registerForm;
   }
 
 }

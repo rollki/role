@@ -2,6 +2,7 @@
 
 namespace Drupal\role_registration\Service;
 
+use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 
 /**
@@ -20,6 +21,14 @@ class RoleRegistrationManager implements RoleRegistrationManagerInterface {
    * {@inheritdoc}
    */
   public function getUserRegistrationFormMode($role_id) {
-    // TODO: Implement getUserRegistrationFormMode() method.
+    $role = Role::load($role_id);
+    if (!$role) {
+      return NULL;
+    }
+    $settings = $this->getRegistrationThirdPartySettings($role);
+    if (!$settings) {
+      return NULL;
+    }
+    return $settings['account_registration_form_mode'];
   }
 }
