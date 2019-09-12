@@ -19,4 +19,21 @@ interface RoleRegistrationManagerInterface {
    */
   const ROLE_REGISTRATION_BASE_REGISTER_PATH = '/user/register';
 
+  /**
+   * Gets all third-party settings which was set for register page on the role edit page.
+   *
+   * @return array
+   *   An array of key-value pairs.
+   */
+  public function getRegistrationThirdPartySettings(UserInterface $user);
+
+  /**
+   * Get user registration form mode based on his roles.
+   *
+   * @param $role_id
+   *
+   * @return string
+   *   User form mode.
+   */
+  public function getUserRegistrationFormMode($role_id);
 }
