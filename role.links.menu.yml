@@ -1,0 +1,4 @@
+role.admin:
+  title: Single role settings
+  parent: user.admin_index
+  route_name: role.single.settings
