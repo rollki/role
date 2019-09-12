@@ -3,6 +3,7 @@
 namespace Drupal\role\Service;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\user\UserInterface;
 
@@ -12,6 +13,13 @@ use Drupal\user\UserInterface;
 class RoleControlManager implements RoleControlManagerInterface {
 
   /**
+   * Extra fields.
+   *
+   * @var array
+   */
+  protected $extraFields = [];
+
+  /**
    * The entity type manager.
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
@@ -19,22 +27,42 @@ class RoleControlManager implements RoleControlManagerInterface {
   protected $entityTypeManager;
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * RoleControlManager constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity tupe manager.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler) {
     $this->entityTypeManager = $entity_type_manager;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
    * {@inheritdoc}
    */
   public function getExtraFields() {
-    return [
+    $extra = $this->moduleHandler->invokeAll('role_extra_field_info');
+    $this->moduleHandler->alter('role_extra_field_info', $extra);
+    $info = isset($extra) ? $extra : [];
+    $info +=  [
       'account_form_mode' => 'account_form_mode',
       'account_view_mode' => 'account_view_mode',
     ];
+    $this->moduleHandler->alter('role_extra_field_info', $extra);
+
+    // Store in the 'static'.
+    $this->extraFields = $info;
+
+    return $this->extraFields;
   }
 
   /**
@@ -83,7 +111,7 @@ class RoleControlManager implements RoleControlManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function getUserPriorityRole(UserInterface $user) {
+  public function getUserPriorityRole(AccountInterface $user) {
     // TODO Implemented only for no more than 2 roles.
     $role_storage = $this->entityTypeManager->getStorage('user_role');
     $roles = $user->getRoles();
@@ -103,7 +131,7 @@ class RoleControlManager implements RoleControlManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function getRoleThirdPartySettings(UserInterface $user) {
+  public function getRoleThirdPartySettings(AccountInterface $user) {
     /** @var \Drupal\user\RoleInterface $role */
     $role = $this->getUserPriorityRole($user);
     return $role->getThirdPartySettings(self::MODULE_NAME);

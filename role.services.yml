@@ -1,5 +1,4 @@
 services:
   role.control_manager:
     class: Drupal\role\Service\RoleControlManager
-    arguments:
-      - '@entity_type.manager'
+    arguments: ['@entity_type.manager', '@module_handler']
