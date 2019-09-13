@@ -5,7 +5,7 @@ namespace Drupal\role_appearance\Theme;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\role\Service\RoleControlManager;
+use Drupal\role\Service\RoleControlManagerInterface;
 use Drupal\Core\Theme\ThemeNegotiatorInterface;
 
 /**
@@ -28,9 +28,9 @@ class ThemeNegotiator implements ThemeNegotiatorInterface {
   protected $configFactory;
 
   /**
-   * Drupal\role\Service\RoleControlManager definition.
+   * Drupal\role\Service\RoleControlManagerInterface definition.
    *
-   * @var \Drupal\role\Service\RoleControlManager
+   * @var \Drupal\role\Service\RoleControlManagerInterface
    */
   protected $roleControlManager;
 
@@ -41,10 +41,10 @@ class ThemeNegotiator implements ThemeNegotiatorInterface {
    *   The current user.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
-   * @param \Drupal\role\Service\RoleControlManager $role_manager
+   * @param \Drupal\role\Service\RoleControlManagerInterface $role_manager
    *   The role manager.
    */
-  public function __construct(AccountInterface $user, ConfigFactoryInterface $config_factory, RoleControlManager $role_manager) {
+  public function __construct(AccountInterface $user, ConfigFactoryInterface $config_factory, RoleControlManagerInterface $role_manager) {
     $this->user = $user;
     $this->configFactory = $config_factory;
     $this->roleControlManager = $role_manager;

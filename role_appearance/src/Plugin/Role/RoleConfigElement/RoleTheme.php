@@ -11,11 +11,11 @@ use Drupal\user\RoleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a role config elements.
+ * Provides a role config element.
  *
  * @RoleConfigElement(
  *   id = "role_theme",
- *   title = @Translation(" theme"),
+ *   title = @Translation("Role theme"),
  * )
  */
 class RoleTheme extends RoleConfigElementBase {
