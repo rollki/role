@@ -5,7 +5,6 @@ namespace Drupal\role_appearance\Plugin\Role\RoleConfigElement;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 use Drupal\role\Plugin\RoleConfigElementBase;
-use Drupal\role\Plugin\RoleConfigElementManager;
 use Drupal\role\Service\RoleControlManager;
 use Drupal\role\Service\RoleControlManagerInterface;
 use Drupal\user\RoleInterface;
@@ -31,7 +30,7 @@ class RoleTheme extends RoleConfigElementBase {
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityDisplayRepositoryInterface $entity_display_repository, RoleControlManager $role_manager, ThemeHandlerInterface $theme_handler)  {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityDisplayRepositoryInterface $entity_display_repository, RoleControlManager $role_manager, ThemeHandlerInterface $theme_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_display_repository, $role_manager);
     $this->themeHandler = $theme_handler;
   }
@@ -49,12 +48,13 @@ class RoleTheme extends RoleConfigElementBase {
       $container->get('theme_handler')
     );
   }
+
   /**
    * {@inheritdoc}
    */
   public function attachElement(&$form, RoleInterface $role) {
     $plugin_id = $this->getPluginId();
-    $themes =  \Drupal::service('theme_handler')->listInfo();
+    $themes = $this->themeHandler->listInfo();
     foreach ($themes as $key => $value) {
       $options[$key] = $value->info['name'];
     }

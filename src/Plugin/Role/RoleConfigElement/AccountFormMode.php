@@ -2,8 +2,6 @@
 
 namespace Drupal\role\Plugin\Role\RoleConfigElement;
 
-use Drupal\Core\Annotation\Translation;
-use Drupal\role\Annotation\RoleConfigElement;
 use Drupal\role\Plugin\RoleConfigElementBase;
 use Drupal\role\Service\RoleControlManagerInterface;
 use Drupal\user\RoleInterface;

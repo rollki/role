@@ -98,10 +98,12 @@ class RoleControlManager implements RoleControlManagerInterface {
     // TODO Implemented only for no more than 2 roles.
     $role_storage = $this->entityTypeManager->getStorage('user_role');
     $roles = $user->getRoles();
-
     $role = NULL;
+    if ($user->isAnonymous()) {
+      return $role_storage->load(AccountInterface::ANONYMOUS_ROLE);
+    }
     if (count($roles) === 1 && in_array(AccountInterface::AUTHENTICATED_ROLE, $roles)) {
-      $role = $role_storage->load(AccountInterface::AUTHENTICATED_ROLE);
+      return $role_storage->load(AccountInterface::AUTHENTICATED_ROLE);
     }
     else {
       array_splice($roles, array_search(AccountInterface::AUTHENTICATED_ROLE, $roles), 1);
@@ -118,6 +120,9 @@ class RoleControlManager implements RoleControlManagerInterface {
   public function getRoleThirdPartySetting(AccountInterface $user, string $config) {
     /** @var \Drupal\user\RoleInterface $role */
     $role = $this->getUserPriorityRole($user);
+    if (!$role) {
+      return NULL;
+    }
     $settings = $role->getThirdPartySettings(self::MODULE_NAME);
 
     return $settings[$config] ?? NULL;

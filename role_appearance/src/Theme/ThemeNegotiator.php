@@ -9,8 +9,8 @@ use Drupal\role\Service\RoleControlManager;
 use Drupal\Core\Theme\ThemeNegotiatorInterface;
 
 /**
-*  Role Theme Negotiator
-*/
+ * Role Theme Negotiator.
+ */
 class ThemeNegotiator implements ThemeNegotiatorInterface {
 
   /**
@@ -41,6 +41,8 @@ class ThemeNegotiator implements ThemeNegotiatorInterface {
    *   The current user.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
+   * @param \Drupal\role\Service\RoleControlManager $role_manager
+   *   The role manager.
    */
   public function __construct(AccountInterface $user, ConfigFactoryInterface $config_factory, RoleControlManager $role_manager) {
     $this->user = $user;
@@ -66,5 +68,7 @@ class ThemeNegotiator implements ThemeNegotiatorInterface {
     }
 
     return $custom_theme;
+
   }
+
 }

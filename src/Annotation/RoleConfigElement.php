@@ -26,9 +26,10 @@ class RoleConfigElement extends Plugin {
   /**
    * The human-readable name of the RoleConfigElement type.
    *
-   * @ingroup plugin_translatable
-   *
    * @var \Drupal\Core\Annotation\Translation
+   *
+   * @ingroup plugin_translatable
    */
   public $label;
+
 }
