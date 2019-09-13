@@ -2,4 +2,10 @@ services:
   role.control_manager:
     class: Drupal\role\Service\RoleControlManager
     arguments:
-      - '@entity_type.manager'
+     - '@entity_type.manager'
+     - '@module_handler'
+     - '@plugin.manager.role_config_element'
+
+  plugin.manager.role_config_element:
+    class: Drupal\role\Plugin\RoleConfigElementManager
+    parent: default_plugin_manager

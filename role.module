@@ -19,7 +19,7 @@ function role_entity_type_alter(array &$entity_types) {
   if (isset($entity_types['user_role'])) {
     /** @var \Drupal\Core\Config\Entity\ConfigEntityTypeInterface $user_role */
     $user_role = &$entity_types['user_role'];
-    $user_role->setFormClass('default',ControlRoleForm::class);
+    $user_role->setFormClass('default', ControlRoleForm::class);
   }
 }
 
@@ -33,7 +33,7 @@ function role_entity_form_display_alter(EntityFormDisplayInterface &$form_displa
     /** @var \Drupal\user\Entity\User $user */
     $user = Drupal::routeMatch()->getParameter('user');
     if (!$user) {
-      return;
+      return NULL;
     }
 
     if ($context['form_mode'] === 'default') {
@@ -58,7 +58,7 @@ function role_entity_view_mode_alter(&$view_mode, EntityInterface $entity, $cont
     /** @var \Drupal\user\Entity\User $user */
     $user = Drupal::routeMatch()->getParameter('user');
     if (!$user) {
-      return;
+      return NULL;
     }
     ($control_manager->getUserAccountViewMode($user) ? $view_mode = $control_manager->getUserAccountViewMode($user) : '');
   }
@@ -87,12 +87,6 @@ function role_form_alter(&$form, FormStateInterface $form_state, $form_id) {
 
 /**
  * Helper function that alters the role form element.
- *
- * @param $element
- *   The form element that should be altered.
- * @param $form
- *
- * @return null
  */
 function _single_role_edit_element(&$element, &$form) {
   /** @var \Drupal\Core\Config\ImmutableConfig $single_role_settings */
