@@ -2,6 +2,7 @@
 
 namespace Drupal\role\Service;
 
+use Drupal\Core\Session\AccountInterface;
 use Drupal\user\UserInterface;
 
 /**
@@ -34,15 +35,12 @@ interface RoleControlManagerInterface {
   public function getExtraFieldKey(string $name);
 
   /**
-   * Get user form mode based on his roles.
-   *
-   * @return string
-   *   User form mode.
+   * Get user form mode based on it roles.
    */
   public function getUserAccountFormMode(UserInterface $user);
 
   /**
-   * Get user view mode based on his roles.
+   * Get user view mode based on it roles.
    *
    * @return string
    *   User view mode.
@@ -50,20 +48,20 @@ interface RoleControlManagerInterface {
   public function getUserAccountViewMode(UserInterface $user);
 
   /**
-   * Get user priority role.
+   * Get current user priority role.
    *
    * @return object
    *   User role.
    */
-  public function getUserPriorityRole(UserInterface $user);
+  public function getUserPriorityRole(AccountInterface $user);
 
   /**
-   * Gets all third-party settings of a given module based on his roles.
+   * Gets all third-party settings of a given module based on it roles.
    *
    * @return array
    *   An array of key-value pairs.
    */
-  public function getRoleThirdPartySettings(UserInterface $user);
+  public function getRoleThirdPartySetting(AccountInterface $user, string $config);
 
   /**
    * Get user form modes options.

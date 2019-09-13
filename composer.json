@@ -15,6 +15,11 @@
       "name": "Mykhailo Gurei",
       "homepage": "https://www.drupal.org/u/ozin",
       "role": "Maintainer"
+    },
+    {
+      "name": "Maria Denysyuk",
+      "homepage": "https://www.drupal.org/u/mariadenysyuk",
+      "role": "Maintainer"
     }
   ],
   "minimum-stability": "dev",
