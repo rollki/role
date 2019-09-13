@@ -34,14 +34,14 @@ class ControlRoleForm extends RoleForm implements ContainerInjectionInterface {
   /**
    * Drupal\role\Service\RoleConfigElementManager definition.
    *
-   * @var \Drupal\role\Plugin\RoleConfigElementManager
+   * @var \Drupal\role\Service\RoleControlManagerInterface
    */
   protected $roleConfigElementManager;
 
   /**
    * TotalRoleForm constructor.
    */
-  public function __construct(EntityDisplayRepositoryInterface $entity_display_repository, RoleControlManager $role_manager, RoleConfigElementManager $role_config_element_manager) {
+  public function __construct(EntityDisplayRepositoryInterface $entity_display_repository, RoleControlManager $role_manager, RoleConfigElementManagerInterface $role_config_element_manager) {
     $this->entityDisplayRepository = $entity_display_repository;
     $this->roleControlManager = $role_manager;
     $this->roleConfigElementManager = $role_config_element_manager;
