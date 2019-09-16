@@ -45,7 +45,12 @@ class RoleControlManager implements RoleControlManagerInterface {
   /**
    * RoleControlManager constructor.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, RoleConfigElementManager $role_config_element_manager, EntityDisplayRepositoryInterface $entity_display_repository) {
+  public function __construct(
+    EntityTypeManagerInterface $entity_type_manager,
+    ModuleHandlerInterface $module_handler,
+    RoleConfigElementManager $role_config_element_manager,
+    EntityDisplayRepositoryInterface $entity_display_repository
+  ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->moduleHandler = $module_handler;
     $this->roleConfigElementManager = $role_config_element_manager;

@@ -5,9 +5,9 @@ namespace Drupal\role\Form;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\role\Plugin\RoleConfigElementManager;
 use Drupal\role\Service\RoleControlManager;
 use Drupal\role\Service\RoleControlManagerInterface;
-use Drupal\role\Plugin\RoleConfigElementManager;
 use Drupal\user\RoleForm;
 use Drupal\user\RoleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -32,16 +32,20 @@ class ControlRoleForm extends RoleForm implements ContainerInjectionInterface {
   protected $roleControlManager;
 
   /**
-   * Drupal\role\Service\RoleConfigElementManager definition.
+   * Drupal\role\Plugin\RoleConfigElementManager definition.
    *
-   * @var \Drupal\role\Service\RoleControlManagerInterface
+   * @var \Drupal\role\Plugin\RoleConfigElementManager
    */
   protected $roleConfigElementManager;
 
   /**
    * TotalRoleForm constructor.
    */
-  public function __construct(EntityDisplayRepositoryInterface $entity_display_repository, RoleControlManager $role_manager, RoleConfigElementManagerInterface $role_config_element_manager) {
+  public function __construct(
+    EntityDisplayRepositoryInterface $entity_display_repository,
+    RoleControlManager $role_manager,
+    RoleConfigElementManager $role_config_element_manager
+  ) {
     $this->entityDisplayRepository = $entity_display_repository;
     $this->roleControlManager = $role_manager;
     $this->roleConfigElementManager = $role_config_element_manager;
