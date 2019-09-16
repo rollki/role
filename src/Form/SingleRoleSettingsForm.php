@@ -10,6 +10,8 @@ use Drupal\Core\Form\FormStateInterface;
  */
 class SingleRoleSettingsForm extends ConfigFormBase {
 
+  const SINGLE_ROLE_CONFIG = 'single_role.settings';
+
   /**
    * {@inheritdoc}
    */
@@ -21,14 +23,14 @@ class SingleRoleSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   protected function getEditableConfigNames() {
-    return ['single.role.settings'];
+    return [self::SINGLE_ROLE_CONFIG];
   }
 
   /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $config = $this->config('single.role.settings');
+    $config = $this->config(self::SINGLE_ROLE_CONFIG);
 
     $form['single_role'] = [
       '#type' => 'fieldset',
@@ -75,7 +77,7 @@ class SingleRoleSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $config = $this->config('single.role.settings');
+    $config = $this->config(self::SINGLE_ROLE_CONFIG);
 
     foreach ($form_state->getValues() as $key => $variable) {
       if (!is_array($key)) {
