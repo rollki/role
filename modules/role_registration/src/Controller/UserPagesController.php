@@ -7,8 +7,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormState;
 use Drupal\role_registration\Service\RoleRegistrationManager;
-use Drupal\user\Entity\Role;
-use Drupal\user\Entity\User;
+use Drupal\user\RoleStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -41,16 +40,25 @@ class UserPagesController extends ControllerBase {
   protected $formBuilder;
 
   /**
+   * The role storage used when changing the admin role.
+   *
+   * @var \Drupal\user\RoleStorageInterface
+   */
+  protected $roleStorage;
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(
     RoleRegistrationManager $role_registration_manager,
     EntityTypeManagerInterface $entityTypeManager,
-    FormBuilderInterface $formBuilder
+    FormBuilderInterface $formBuilder,
+    RoleStorageInterface $role_storage
   ) {
     $this->roleRegistrationManager = $role_registration_manager;
     $this->entityTypeManager = $entityTypeManager;
     $this->formBuilder = $formBuilder;
+    $this->roleStorage = $role_storage;
   }
 
   /**
@@ -60,7 +68,8 @@ class UserPagesController extends ControllerBase {
     return new static(
       $container->get('role_registration.manager'),
       $container->get('entity_type.manager'),
-      $container->get('form_builder')
+      $container->get('form_builder'),
+      $container->get('entity.manager')->getStorage('user_role')
     );
   }
 
@@ -70,7 +79,7 @@ class UserPagesController extends ControllerBase {
    * @return array
    */
   public function registerPage($role_id) {
-    $role = Role::load($role_id);
+    $role = $this->roleStorage->load($role_id);
     $third_party_settings = $this->roleRegistrationManager->getRegistrationThirdPartySettings($role);
     if (!$third_party_settings['registration_status']) {
       throw new NotFoundHttpException();
@@ -83,13 +92,13 @@ class UserPagesController extends ControllerBase {
       $this->entityTypeManager->clearCachedDefinitions();
     }
 
-    $entity = User::create();
+    $entity = $this->entityTypeManager()->getStorage('user')->create();
     $form_object = $this->entityTypeManager->getFormObject($entity->getEntityTypeId(), $form_display);
     $form_object->setEntity($entity);
 
     $form_state = (new FormState())->setFormState([]);
     // Add role id value for form state.
-    $form_state->setValue('roleId', $role_id);
+    $form_state->setValue('role_id', $role_id);
     $registerForm = $this->formBuilder->buildForm($form_object, $form_state);
 
     return $registerForm;

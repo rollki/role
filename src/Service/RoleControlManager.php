@@ -6,6 +6,8 @@ use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\role\Plugin\RoleConfigElementManager;
 use Drupal\user\UserInterface;
 
@@ -13,6 +15,8 @@ use Drupal\user\UserInterface;
  * Class RoleControlManager.
  */
 class RoleControlManager implements RoleControlManagerInterface {
+
+  use StringTranslationTrait;
 
   /**
    * The entity type manager.
@@ -49,12 +53,28 @@ class RoleControlManager implements RoleControlManagerInterface {
     EntityTypeManagerInterface $entity_type_manager,
     ModuleHandlerInterface $module_handler,
     RoleConfigElementManager $role_config_element_manager,
-    EntityDisplayRepositoryInterface $entity_display_repository
+    EntityDisplayRepositoryInterface $entity_display_repository,
+    TranslationInterface $stringTranslation
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->moduleHandler = $module_handler;
     $this->roleConfigElementManager = $role_config_element_manager;
     $this->entityDisplayRepository = $entity_display_repository;
+    $this->stringTranslation = $stringTranslation;
+  }
+
+  /**
+   * Gets the string translation service.
+   *
+   * @return \Drupal\Core\StringTranslation\TranslationInterface
+   *   The string translation service.
+   */
+  protected function getStringTranslation() {
+    if (!$this->stringTranslation) {
+      $this->stringTranslation = \Drupal::service('string_translation');
+    }
+
+    return $this->stringTranslation;
   }
 
   /**
@@ -147,7 +167,7 @@ class RoleControlManager implements RoleControlManagerInterface {
    */
   public function getUserFormModesOptions() {
     $user_form_modes = $this->entityDisplayRepository->getFormModeOptionsByBundle('user', 'user');
-    $user_form_modes_options = ['default' => 'Default'];
+    $user_form_modes_options = ['default' => $this->t('Default')];
     foreach ($user_form_modes as $key => $form_mode_label) {
       $user_form_modes_options[$key] = $form_mode_label;
     }

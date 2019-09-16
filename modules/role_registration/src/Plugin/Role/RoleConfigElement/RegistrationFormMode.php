@@ -65,9 +65,9 @@ class RegistrationFormMode extends RoleConfigElementBase {
 
     $form['account']['registration'][$plugin_id] = [
       '#type' => 'select',
-      '#title' => t('Registration Form mode'),
+      '#title' => $this->t('Registration Form mode'),
       '#options' => $this->roleControlManager->getUserFormModesOptions(),
-      '#description' => t('Select which form mode to use on the user registration page'),
+      '#description' => $this->t('Select which form mode to use on the user registration page'),
       '#states' => [
         'visible' => [
           [':input[name="registration_status"]' => ['checked' => TRUE]],
