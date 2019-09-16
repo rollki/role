@@ -10,8 +10,8 @@ use Drupal\Component\Annotation\Plugin;
  * @Annotation
  *
  * @see \Drupal\role\Service\RoleConfigElementManager
- * @see \Drupal\role\RoleConfigElementInterface
- * @see \Drupal\role\RoleConfigElementBase
+ * @see \Drupal\role\Plugin\RoleConfigElementInterface
+ * @see \Drupal\role\Plugin\RoleConfigElementBase
  * @see plugin_api
  */
 class RoleConfigElement extends Plugin {
