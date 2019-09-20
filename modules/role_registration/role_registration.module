@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Contains role_registration.module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element\PathElement;
+use Drupal\role_registration\Service\RoleRegistrationManagerInterface;
+use Drupal\user\RoleInterface;
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function role_registration_entity_type_alter(array &$entity_types) {
+  // Get all form display modes.
+  $form_modes = Drupal::service('entity_display.repository')->getAllFormModes();
+  foreach ($form_modes as $entity_type => $display_modes) {
+    if ($entity_type !== 'user') {
+      continue;
+    }
+
+    $user_type = $entity_types[$entity_type];
+    foreach ($display_modes as $machine_name => $form_display) {
+      $default_handler_class = $user_type->getHandlerClasses()['form']['default'];
+      $user_type->setFormClass($machine_name, $default_handler_class);
+    }
+  }
+}

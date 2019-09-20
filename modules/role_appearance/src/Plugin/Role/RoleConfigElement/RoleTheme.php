@@ -64,9 +64,9 @@ class RoleTheme extends RoleConfigElementBase {
     ];
     $form['appearance'][$plugin_id] = [
       '#type' => 'select',
-      '#title' => t('Installed themes'),
-      '#description' => t('Select which themes to use for user'),
-      '#default_value' => $role->getThirdPartySetting(RoleControlManagerInterface::MODULE_NAME, $plugin_id),
+      '#title' => $this->t('Installed themes'),
+      '#description' => $this->t('Select which themes to use for user'),
+      '#default_value' => $role->getThirdPartySetting($this->pluginDefinition['provider'], $plugin_id),
       '#options' => $options,
     ];
   }

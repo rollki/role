@@ -24,27 +24,10 @@ class AccountFormMode extends RoleConfigElementBase {
     $form['account'][$plugin_id] = [
       '#type' => 'select',
       '#title' => $this->t('Form mode'),
-      '#options' => $this->getUserFormModesOptions(),
+      '#options' => $this->roleControlManager->getUserFormModesOptions(),
       '#description' => $this->t('Select which form mode to use on the user account edit form'),
       '#default_value' => $role->getThirdPartySetting(RoleControlManagerInterface::MODULE_NAME, $plugin_id),
     ];
-  }
-
-  /**
-   * Get user form modes options.
-   *
-   * @return array
-   *   Form mode options.
-   */
-  public function getUserFormModesOptions() {
-    // Load user display modes.
-    $user_form_modes = $this->entityDisplayRepository->getFormModeOptionsByBundle('user', 'user');
-    $user_form_modes_options = ['default' => $this->t('Default')];
-    foreach ($user_form_modes as $key => $form_mode_label) {
-      $user_form_modes_options[$key] = $form_mode_label;
-    }
-
-    return $user_form_modes_options;
   }
 
 }

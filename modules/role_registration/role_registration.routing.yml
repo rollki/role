@@ -1,0 +1,6 @@
+role_registration.register_page:
+  path: 'user/register/{role_id}'
+  defaults:
+    _controller: 'Drupal\role_registration\Controller\UserPagesController::registerPage'
+  requirements:
+    _access_user_register: 'TRUE'

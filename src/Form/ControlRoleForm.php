@@ -32,16 +32,20 @@ class ControlRoleForm extends RoleForm implements ContainerInjectionInterface {
   protected $roleControlManager;
 
   /**
-   * Drupal\role\Service\RoleConfigElementManager definition.
+   * Drupal\role\Plugin\RoleConfigElementManager definition.
    *
-   * @var \Drupal\role\Service\RoleControlManagerInterface
+   * @var \Drupal\role\Plugin\RoleConfigElementManager
    */
   protected $roleConfigElementManager;
 
   /**
    * TotalRoleForm constructor.
    */
-  public function __construct(EntityDisplayRepositoryInterface $entity_display_repository, RoleControlManager $role_manager, RoleConfigElementManager $role_config_element_manager) {
+  public function __construct(
+    EntityDisplayRepositoryInterface $entity_display_repository,
+    RoleControlManager $role_manager,
+    RoleConfigElementManager $role_config_element_manager
+  ) {
     $this->entityDisplayRepository = $entity_display_repository;
     $this->roleControlManager = $role_manager;
     $this->roleConfigElementManager = $role_config_element_manager;
@@ -82,9 +86,14 @@ class ControlRoleForm extends RoleForm implements ContainerInjectionInterface {
    * Role entity builder.
    */
   public function controlRoleBuilder($entity_type, RoleInterface $role, &$form, FormStateInterface &$form_state) {
+    $module_name = RoleControlManagerInterface::MODULE_NAME;
     foreach ($this->roleControlManager->getExtraFields() as $field_name) {
       if ($form_state->hasValue($field_name)) {
-        $role->setThirdPartySetting(RoleControlManagerInterface::MODULE_NAME, $field_name, $form_state->getValue($field_name));
+        $plugin_def = $this->roleConfigElementManager->getDefinition($field_name);
+        if (isset($plugin_def) && !empty($plugin_def['provider'])) {
+          $module_name = $plugin_def['provider'];
+        }
+        $role->setThirdPartySetting($module_name, $field_name, $form_state->getValue($field_name));
       }
     }
   }

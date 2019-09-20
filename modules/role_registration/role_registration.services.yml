@@ -1,0 +1,4 @@
+services:
+  role_registration.manager:
+    class: Drupal\role_registration\Service\RoleRegistrationManager
+    arguments: ['@entity_type.manager', '@entity_display.repository']
