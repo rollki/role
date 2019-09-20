@@ -4,4 +4,4 @@ description: "Allow manage theme settings per role"
 package: User
 core: 8.x
 dependencies:
-  - drupal:user
+  - role:role

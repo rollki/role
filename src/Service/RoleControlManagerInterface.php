@@ -70,4 +70,5 @@ interface RoleControlManagerInterface {
    *   Form mode options.
    */
   public function getUserFormModesOptions();
+
 }
