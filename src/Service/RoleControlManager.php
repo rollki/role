@@ -174,4 +174,5 @@ class RoleControlManager implements RoleControlManagerInterface {
 
     return $user_form_modes_options;
   }
+
 }
