@@ -28,3 +28,18 @@ function role_registration_entity_type_alter(array &$entity_types) {
     }
   }
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ * @param $form_id
+ */
+function role_registration_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Check if role_id is set.
+  if ($role_id = $form_state->getValue('role_id')) {
+    $form['role_id'] = ['#type' => 'value', '#value' => $role_id];
+    $form['#validate'][] = 'Drupal\role_registration\Service\RoleRegistrationManager::addRoleToUser';
+  }
+}
