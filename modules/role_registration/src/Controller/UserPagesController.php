@@ -6,7 +6,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormState;
-use Drupal\role_registration\Service\RoleRegistrationManager;
+use Drupal\role_registration\Service\RoleRegistrationManagerInterface;
 use Drupal\user\RoleStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -17,13 +17,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @package Drupal\role_registration\Controller
  */
 class UserPagesController extends ControllerBase {
-
-  /**
-   * The RoleRegistrationManager service.
-   *
-   * @var \Drupal\role_registration\Service\RoleRegistrationManager
-   */
-  protected $roleRegistrationManager;
 
   /**
    * The entity type manager service.
@@ -50,12 +43,10 @@ class UserPagesController extends ControllerBase {
    * {@inheritdoc}
    */
   public function __construct(
-    RoleRegistrationManager $role_registration_manager,
     EntityTypeManagerInterface $entityTypeManager,
     FormBuilderInterface $formBuilder,
     RoleStorageInterface $role_storage
   ) {
-    $this->roleRegistrationManager = $role_registration_manager;
     $this->entityTypeManager = $entityTypeManager;
     $this->formBuilder = $formBuilder;
     $this->roleStorage = $role_storage;
@@ -66,7 +57,6 @@ class UserPagesController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('role_registration.manager'),
       $container->get('entity_type.manager'),
       $container->get('form_builder'),
       $container->get('entity.manager')->getStorage('user_role')
@@ -79,8 +69,9 @@ class UserPagesController extends ControllerBase {
    * @return array
    */
   public function registerPage($role_id) {
+    /** @var \Drupal\user\RoleInterface $role */
     $role = $this->roleStorage->load($role_id);
-    $third_party_settings = $this->roleRegistrationManager->getRegistrationThirdPartySettings($role);
+    $third_party_settings = $role->getThirdPartySettings(RoleRegistrationManagerInterface::MODULE_NAME);
     if (!$third_party_settings['registration_status']) {
       throw new NotFoundHttpException();
     }
