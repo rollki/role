@@ -29,4 +29,12 @@ interface RoleRegistrationManagerInterface {
    */
   public static function addRoleToUser(array &$form, FormStateInterface $form_state);
 
+  /**
+   * Get register display base path.
+   *
+   * @return string
+   *   Base path.
+   */
+  public function getRegisterDisplayBasePath();
+
 }
