@@ -2,10 +2,8 @@
 
 namespace Drupal\Tests\role\Functional;
 
-use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\Entity\Role;
-use Drupal\user\RoleInterface;
 
 /**
  * Tests adding, editing and deleting user roles and changing role weights.
@@ -33,7 +31,7 @@ class RoleSettingsFormTest extends BrowserTestBase {
    */
   protected function setUp() {
     parent::setUp();
-    $this->adminUser = $this->drupalCreateUser(['administer permissions', 'administer users', 'access administration pages']);
+    $this->adminUser = $this->drupalCreateUser(['administer permissions', 'administer users']);
   }
 
   /**
