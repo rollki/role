@@ -42,9 +42,9 @@ class RoleSettingsFormTest extends BrowserTestBase {
 
     $this->drupalGet('admin/people/roles/add');
     $form_mode_element = $this->xpath('//select[@name=:name]', [':name' => 'account_form_mode']);
-    $this->assertTrue(isset($form_mode_element), 'Form mode setting was found.');
+    $this->assertTrue($form_mode_element, 'Form mode setting was found.');
     $view_mode_element = $this->xpath('//select[@id=:id]', [':id' => 'edit-account-view-mode']);
-    $this->assertTrue(isset($view_mode_element), 'View mode setting was found.');
+    $this->assertTrue($view_mode_element, 'View mode setting was found.');
 
     $role_name = 'total_role';
     $edit = [
