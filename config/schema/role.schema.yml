@@ -1,0 +1,10 @@
+user.role.*.third_party.role:
+  type: mapping
+  label: 'Reusable Forms'
+  mapping:
+    account_form_mode:
+      type: string
+      label: 'Account form mode'
+    account_view_mode:
+      type: string
+      label: 'Account view mode'
