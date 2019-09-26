@@ -2,7 +2,7 @@
 
 namespace Drupal\role_registration\Service;
 
-use Drupal\user\RoleInterface;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Base interface definition for RoleRegistrationManagerInterface service.
@@ -20,14 +20,13 @@ interface RoleRegistrationManagerInterface {
   const ROLE_REGISTRATION_BASE_REGISTER_PATH = '/user/register';
 
   /**
-   * Gets all third-party settings which was set for register page on the role edit page.
+   * Inject user role in the creation process.
    *
-   * @param \Drupal\user\RoleInterface $role
-   *
-   * @param null $setting_name
-   *
-   * @return array
-   *   An array of key-value pairs.
+   * @param array $form
+   *   Register form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   Form state.
    */
-  public function getRegistrationThirdPartySettings(RoleInterface $role, $setting_name = NULL);
+  public static function addRoleToUser(array &$form, FormStateInterface $form_state);
+
 }
