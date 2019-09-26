@@ -4,9 +4,11 @@ namespace Drupal\Tests\role\Unit;
 
 use Drupal\Core\Cache\MemoryCache\MemoryCache;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
+use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\role\Plugin\RoleConfigElementManager;
 use Drupal\role\Service\RoleControlManager;
 use Drupal\Tests\UnitTestCase;
@@ -41,6 +43,13 @@ class RoleControlManagerTest extends UnitTestCase {
    * @var \Drupal\role\Plugin\RoleConfigElementManager
    */
   protected $roleConfigElementManager;
+
+  /**
+   * The entity display repository.
+   *
+   * @var \Drupal\Core\Entity\EntityDisplayRepositoryInterface
+   */
+  protected $entityDisplayRepository;
 
   /**
    * The mocked 'anonymous' user account.
@@ -189,8 +198,11 @@ class RoleControlManagerTest extends UnitTestCase {
     $roleConfigElementManager->expects($this->any())
       ->method('getDefinitions')
       ->will($this->returnValue($this->definitions));
+    $entityDisplayRepository = $this->getMock(EntityDisplayRepositoryInterface::class);
 
-    $roleManager = new RoleControlManager($entity_manager, $module_handler, $roleConfigElementManager);
+    $translation_manager = $this->getMock(TranslationInterface::class);
+
+    $roleManager = new RoleControlManager($entity_manager, $module_handler, $roleConfigElementManager, $entityDisplayRepository, $translation_manager);
 
     $container->set('role.control_manager', $roleManager);
     \Drupal::setContainer($container);
