@@ -75,6 +75,11 @@ class RegistrationAlias extends RoleConfigElementBase {
     $plugin_id = $this->getPluginId();
     $register_page_url = $this->roleRegistrationManager->getRegisterDisplayBasePath() . '/' . $role->id();
 
+    $form['account']['registration'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Registration'),
+    ];
+
     $form['account']['registration'][$plugin_id] = [
       '#type' => 'textfield',
       '#title' => $this->t('Registration page alias'),
@@ -83,7 +88,12 @@ class RegistrationAlias extends RoleConfigElementBase {
       '#description' => $this->t('Register page url for this role is @url', ['@url' => $register_page_url]),
       '#field_prefix' => $this->requestContext->getCompleteBaseUrl(),
       '#required' => FALSE,
-      '#weight' => 100
+      '#states' => [
+        'visible' => [
+          [':input[name="account_registration_status"]' => ['checked' => TRUE]],
+        ],
+      ],
+      '#weight' => 3,
     ];
   }
 

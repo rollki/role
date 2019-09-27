@@ -28,10 +28,11 @@ class RegistrationFormMode extends RoleConfigElementBase {
       '#description' => $this->t('Select which form mode to use on the user registration page'),
       '#states' => [
         'visible' => [
-          [':input[name="registration_status"]' => ['checked' => TRUE]],
+          [':input[name="account_registration_status"]' => ['checked' => TRUE]],
         ],
       ],
       '#default_value' => $role->getThirdPartySetting($this->pluginDefinition['provider'], $plugin_id),
+      '#weight' => 2,
     ];
   }
 
