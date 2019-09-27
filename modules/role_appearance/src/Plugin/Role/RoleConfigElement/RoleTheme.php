@@ -6,7 +6,6 @@ use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 use Drupal\role\Plugin\RoleConfigElementBase;
 use Drupal\role\Service\RoleControlManager;
-use Drupal\role\Service\RoleControlManagerInterface;
 use Drupal\user\RoleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
