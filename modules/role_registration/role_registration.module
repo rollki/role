@@ -6,9 +6,7 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element\PathElement;
 use Drupal\role_registration\Service\RoleRegistrationManagerInterface;
-use Drupal\user\RoleInterface;
 
 /**
  * Implements hook_entity_type_alter().
@@ -31,10 +29,6 @@ function role_registration_entity_type_alter(array &$entity_types) {
 
 /**
  * Implements hook_form_FORM_ID_alter().
- *
- * @param $form
- * @param \Drupal\Core\Form\FormStateInterface $form_state
- * @param $form_id
  */
 function role_registration_form_user_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   // Check if role_id is set.
@@ -42,4 +36,58 @@ function role_registration_form_user_form_alter(&$form, FormStateInterface $form
     $form['role_id'] = ['#type' => 'value', '#value' => $role_id];
     $form['#validate'][] = 'Drupal\role_registration\Service\RoleRegistrationManager::addRoleToUser';
   }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function role_registration_form_user_role_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['#validate'][] = 'role_registration_validate_alias';
+  $form['actions']['submit']['#submit'][] = 'role_registration_update_alias';
+}
+
+/**
+ * Validate alias handler.
+ *
+ * @param array $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ */
+function role_registration_validate_alias(array &$form, FormStateInterface $form_state) {
+  $register_page_alias = $form_state->getValue('account_registration_alias');
+  $register_page_alias = rtrim(trim(trim($register_page_alias), ''), "\\/");
+
+  if ($register_page_alias[0] !== '/') {
+    $form_state->setErrorByName('account_registration_alias', 'The alias path has to start with a slash.');
+  }
+
+  // We need to check the alias.
+  // Ignore check if this is form submitted for the first time.
+  /** @var \Drupal\user\RoleInterface $role */
+  $role = $form_state->getFormObject()->getEntity();
+  /** @var \Drupal\role_registration\Service\RoleRegistrationManagerInterface $registration_manager */
+  $registration_manager = Drupal::service('role_registration.manager');
+  $settings = $role->getThirdPartySettings(RoleRegistrationManagerInterface::MODULE_NAME);
+  if ($settings) {
+    if ($settings['account_registration_alias'] != $form_state->getValue('account_registration_alias')) {
+      // This is creation for new alis, we need to be sure its not exist.
+      if ($registration_manager->isAliasExist($form_state->getValue('account_registration_alias'))) {
+        // Here we set error that alias is exist.
+        $form_state->setErrorByName('account_registration_alias', $this->t('Alias already exist.'));
+      }
+    }
+  }
+}
+
+/**
+ * Update alias handler.
+ *
+ * @param array $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ */
+function role_registration_update_alias(array &$form, FormStateInterface $form_state) {
+  /** @var \Drupal\role_registration\Service\RoleRegistrationManagerInterface $registration_manager */
+  $registration_manager = Drupal::service('role_registration.manager');
+  $alias = $form_state->getValue('account_registration_alias');
+  $base_url = RoleRegistrationManagerInterface::ROLE_REGISTRATION_BASE_REGISTER_PATH . '/' . $form_state->getValue('id');
+  $registration_manager->updateAlias($base_url, $alias);
 }

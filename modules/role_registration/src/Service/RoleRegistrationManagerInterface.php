@@ -29,4 +29,41 @@ interface RoleRegistrationManagerInterface {
    */
   public static function addRoleToUser(array &$form, FormStateInterface $form_state);
 
+  /**
+   * Get register display base path.
+   *
+   * @return string
+   *   Base path.
+   */
+  public function getRegisterDisplayBasePath();
+
+  /**
+   * Wrapper to check if alias exist.
+   *
+   * @param string $alias
+   *   Alias to check.
+   *
+   * @return bool
+   *   True if alias exist, otherwise FALSE.
+   */
+  public function isAliasExist($alias);
+
+  /**
+   * Update alias.
+   *
+   * @param string $source
+   *   Source path.
+   * @param string $alias
+   *   Alias path.
+   */
+  public function updateAlias($source, $alias);
+
+  /**
+   * Delete alias by source.
+   *
+   * @param string $source
+   *   Source path.
+   */
+  public function deleteAliasBySource($source);
+
 }
