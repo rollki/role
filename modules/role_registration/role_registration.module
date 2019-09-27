@@ -88,6 +88,6 @@ function role_registration_update_alias(array &$form, FormStateInterface $form_s
   /** @var \Drupal\role_registration\Service\RoleRegistrationManagerInterface $registration_manager */
   $registration_manager = Drupal::service('role_registration.manager');
   $alias = $form_state->getValue('account_registration_alias');
-  $base_url = RoleRegistrationManagerInterface::ROLE_REGISTRATION_BASE_REGISTER_PATH . $form_state->getValue('id');
+  $base_url = RoleRegistrationManagerInterface::ROLE_REGISTRATION_BASE_REGISTER_PATH . '/' . $form_state->getValue('id');
   $registration_manager->updateAlias($base_url, $alias);
 }
