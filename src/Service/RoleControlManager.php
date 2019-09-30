@@ -157,7 +157,9 @@ class RoleControlManager implements RoleControlManagerInterface {
     if (!$role) {
       return NULL;
     }
-    $settings = $role->getThirdPartySettings(self::MODULE_NAME);
+    $plugin_def = $this->roleConfigElementManager->getDefinition($config);
+    $module_name = $plugin_def['provider'] ?? self::MODULE_NAME;
+    $settings = $role->getThirdPartySettings($module_name);
 
     return $settings[$config] ?? NULL;
   }
