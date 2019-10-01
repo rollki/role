@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Contains install/uninstall functionality of module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function role_uninstall() {
+  \Drupal::configFactory()->getEditable('single_role.settings')->delete();
+}
