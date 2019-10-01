@@ -72,7 +72,7 @@ class UserPagesController extends ControllerBase {
     /** @var \Drupal\user\RoleInterface $role */
     $role = $this->roleStorage->load($role_id);
     $third_party_settings = $role->getThirdPartySettings(RoleRegistrationManagerInterface::MODULE_NAME);
-    if (!$third_party_settings['registration_status']) {
+    if (!$third_party_settings['account_registration_status']) {
       throw new NotFoundHttpException();
     }
     $form_display = $third_party_settings['account_registration_form_mode'];
