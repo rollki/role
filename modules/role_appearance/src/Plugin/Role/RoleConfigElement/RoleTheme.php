@@ -53,9 +53,12 @@ class RoleTheme extends RoleConfigElementBase {
    */
   public function attachElement(&$form, RoleInterface $role) {
     $plugin_id = $this->getPluginId();
-    $themes = $this->themeHandler->listInfo();
-    foreach ($themes as $key => $value) {
-      $options[$key] = $value->info['name'];
+    $options = [];
+    foreach ($this->themeHandler->listInfo() as $name => $theme) {
+      if (!empty($theme->info['hidden'])) {
+        continue;
+      }
+      $options[$name] = $theme->info['name'];
     }
     $form['appearance'] = [
       '#type' => 'fieldset',
