@@ -20,6 +20,11 @@
       "name": "Mariia Denysiuk",
       "homepage": "https://www.drupal.org/u/mariadenysyuk",
       "role": "Maintainer"
+    },
+    {
+      "name": "Oleksandr Yushchenko",
+      "homepage": "https://www.drupal.org/u/oyushchenko",
+      "role": "Maintainer"
     }
   ],
   "minimum-stability": "dev",
