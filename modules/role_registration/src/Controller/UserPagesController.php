@@ -64,11 +64,20 @@ class UserPagesController extends ControllerBase {
   }
 
   /**
-   * @param \Drupal\role_registration\Controller\string $role_id
+   * Builds the registration form.
+   *
+   * @param string $role_id
+   *   The role_id parameter for registration form.
    *
    * @return array
+   *   The register form.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Core\Form\EnforcedResponseException
+   * @throws \Drupal\Core\Form\FormAjaxException
    */
-  public function registerPage($role_id) {
+  public function registerPage(string $role_id) {
     /** @var \Drupal\user\RoleInterface $role */
     $role = $this->roleStorage->load($role_id);
     $third_party_settings = $role->getThirdPartySettings(RoleRegistrationManagerInterface::MODULE_NAME);

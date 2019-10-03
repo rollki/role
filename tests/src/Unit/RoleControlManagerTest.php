@@ -5,7 +5,7 @@ namespace Drupal\Tests\role\Unit;
 use Drupal\Core\Cache\MemoryCache\MemoryCache;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
-use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
@@ -175,7 +175,8 @@ class RoleControlManagerTest extends UnitTestCase {
       ->method('id')
       ->willReturn(4);
 
-    $entity_manager = $this->getMockBuilder(EntityManagerInterface::class)->getMock();
+    $entity_manager = $this->getMockBuilder(EntityTypeManagerInterface::class)
+      ->getMock();
     $entity_manager->expects($this->any())
       ->method('getStorage')
       ->with($this->equalTo('user_role'))
@@ -227,8 +228,9 @@ class RoleControlManagerTest extends UnitTestCase {
    * Test fetching extra field keys.
    */
   public function testGetExtraFieldKey() {
+    $role_control_manager = \Drupal::service('role.control_manager');
     foreach ($this->extraFields as $field_key) {
-      $this->assertEquals($field_key, \Drupal::service('role.control_manager')->getExtraFieldKey($field_key));
+      $this->assertEquals($field_key, $role_control_manager->getExtraFieldKey($field_key));
     }
   }
 

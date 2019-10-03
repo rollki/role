@@ -9,7 +9,6 @@ use Drupal\role\Service\RoleControlManager;
 use Drupal\role\Service\RoleControlManagerInterface;
 use Drupal\role\Plugin\RoleConfigElementManager;
 use Drupal\user\RoleForm;
-use Drupal\user\RoleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

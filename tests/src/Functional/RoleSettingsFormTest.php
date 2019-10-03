@@ -31,7 +31,10 @@ class RoleSettingsFormTest extends BrowserTestBase {
    */
   protected function setUp() {
     parent::setUp();
-    $this->adminUser = $this->drupalCreateUser(['administer permissions', 'administer users']);
+    $this->adminUser = $this->drupalCreateUser([
+      'administer permissions',
+      'administer users',
+    ]);
   }
 
   /**

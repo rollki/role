@@ -35,6 +35,8 @@ class RoleRegistrationManager implements RoleRegistrationManagerInterface {
   protected $aliasStorage;
 
   /**
+   * The language manager.
+   *
    * @var \Drupal\Core\Language\LanguageManagerInterface
    */
   protected $languageManager;

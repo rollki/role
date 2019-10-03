@@ -15,7 +15,8 @@ Module extends Drupal role and allows configure user settings per role.
 
 For instance user form or view mode.
  
-Role configurations appends settings to default config file by `ThirdPartySettingsInterface`.
+Role configurations appends settings to default config file by
+`ThirdPartySettingsInterface`.
 
 Base module features:
  * Control user edit form mode per Role
@@ -23,9 +24,11 @@ Base module features:
 
 Sub modules:
  * Role Appearance: Controls site theme per user Role
- * Role Registration: Adds a new route `user/register/{role_id}` for specific role registration
+ * Role Registration: Adds a new route `user/register/{role_id}` for specific
+   role registration
 
-Adds a new plugin type `RoleConfigElement` which allows add extra fields to Role.
+Adds a new plugin type `RoleConfigElement` which allows to add extra fields
+to Role.
 
  * For a full description of the module, visit the project page:
    https://www.drupal.org/project/role

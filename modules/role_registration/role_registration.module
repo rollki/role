@@ -48,11 +48,6 @@ function role_registration_form_user_role_form_alter(&$form, FormStateInterface 
 
 /**
  * Validate alias handler.
- *
- * @param array $form
- * @param \Drupal\Core\Form\FormStateInterface $form_state
- *
- * @return null
  */
 function role_registration_validate_alias(array &$form, FormStateInterface $form_state) {
   $registration_status = $form_state->getValue('account_registration_status');
@@ -89,9 +84,6 @@ function role_registration_validate_alias(array &$form, FormStateInterface $form
 
 /**
  * Update alias handler.
- *
- * @param array $form
- * @param \Drupal\Core\Form\FormStateInterface $form_state
  */
 function role_registration_update_alias(array &$form, FormStateInterface $form_state) {
   /** @var \Drupal\role_registration\Service\RoleRegistrationManagerInterface $registration_manager */
