@@ -1,0 +1,7 @@
+user.role.*.third_party.role_appearance:
+  type: mapping
+  label: 'Reusable Forms'
+  mapping:
+    role_theme:
+      type: string
+      label: 'Account theme'
