@@ -49,6 +49,7 @@ class RoleThemeTest extends BrowserTestBase {
     $this->adminUser = $this->drupalCreateUser(['administer permissions', 'administer users']);
     $this->themeHandler = $this->container->get('theme_handler');
     $this->themeNegotiator = $this->container->get('theme.negotiator.role_appearance');
+    $this->themeHandler->install(['seven', 'bartik']);
   }
 
   /**
@@ -86,8 +87,6 @@ class RoleThemeTest extends BrowserTestBase {
     $role->setThirdPartySetting('role_appearance', 'role_theme', $role_theme)->save();
     $this->assertTrue($role->getThirdPartySetting('role_appearance', 'role_theme'), 'Theme setting was saved.');
 
-    // Install and set default theme.
-    $this->themeHandler->install(['bartik']);
     $this->config('system.theme')->set('default', 'bartik')->save();
 
     // Create account without theme per role settings.
