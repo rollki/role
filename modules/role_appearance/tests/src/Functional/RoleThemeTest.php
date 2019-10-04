@@ -64,7 +64,7 @@ class RoleThemeTest extends BrowserTestBase {
     $edit = [
       'label' => $role_name,
       'id' => $role_name,
-      'role_theme' => 'stable',
+      'role_theme' => 'seven',
     ];
     $this->drupalPostForm('admin/people/roles/add', $edit, t('Save'));
     $this->assertRaw(t('Role %label has been added.', ['%label' => $role_name]));
@@ -72,14 +72,14 @@ class RoleThemeTest extends BrowserTestBase {
     $this->assertTrue(is_object($role), 'The role was successfully retrieved from the database.');
     $role_theme = $role->getThirdPartySetting('role_appearance', 'role_theme');
     $this->assertTrue(!empty($role_theme), 'Theme setting was saved.');
-    $this->assertEquals($role_theme, 'stable');
+    $this->assertEquals($role_theme, 'seven');
   }
 
   /**
    * Tests the role theme negotiator.
    */
   public function testDetermineActiveTheme() {
-    $role_theme = 'stable';
+    $role_theme = 'seven';
     // Creatr role and set custom view display.
     $role_1 = $this->drupalCreateRole([], 'custom_role_1', 'custom_role_1');
     $role = Role::load($role_1);
@@ -106,7 +106,7 @@ class RoleThemeTest extends BrowserTestBase {
 
     $route_name = \Drupal::routeMatch();
     $role_theme = $this->themeNegotiator->determineActiveTheme($route_name);
-    $this->assertEquals($role_theme, 'stable');
+    $this->assertEquals($role_theme, 'seven');
   }
 
 }
